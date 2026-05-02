@@ -101,6 +101,9 @@ h3 {
   font-size:22px;
   margin-top:20px;
 }
+#trainerBoard {
+  background:#fff;
+}  
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css">
 
@@ -110,7 +113,7 @@ h3 {
 </head>
 <body>
 
-<h2>♕ ♔ TOSHIT CHESS HUB ♘♖</h2>
+<h2>♕♔ TOSHIT CHESS HUB ♘♖</h2>
 <div class="title-bar"></div>
 <div id="home" class="screen active">
 
@@ -194,8 +197,7 @@ Grandmaster की तरह सोचना सीखें — सही च�
 
 <h3>🎯 Guess the Best Move</h3>
 
-<div id="trainerBoard" style="width:320px; margin:20px auto;"></div>
-
+<div id="trainerBoard" style="width:320px; height:320px; margin:20px auto;"></div>
 <p>White to move — Best move क्या है?</p>
 
 <button onclick="checkMove('e4')">e4</button>
@@ -214,14 +216,15 @@ let player="", time="";
 
 // navigation
 function go(id){
+
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 
+  // 👉 CRITICAL FIX (delay बढ़ाया)
   if(id === "trainer"){
-    setTimeout(loadTrainer, 200);
+    setTimeout(loadTrainer, 500);
   }
 }
-
 // selections
 function setPlayer(p){
   player = p;
@@ -330,6 +333,11 @@ let trainerGame, trainerBoard;
 
 function loadTrainer(){
 
+  // पुराना board destroy
+  if (trainerBoard) {
+    trainerBoard.destroy();
+  }
+
   trainerGame = new Chess();
 
   trainerBoard = Chessboard('trainerBoard', {
@@ -339,7 +347,6 @@ function loadTrainer(){
   });
 
 }
-
 
 function checkMove(move){
 
