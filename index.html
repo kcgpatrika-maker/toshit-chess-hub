@@ -220,30 +220,56 @@ function setTime(t){
 function startGame(){
 
   if(player===""){
-    alert("Select Player");
+    alert("Select Grandmaster");
     return;
   }
 
   let url="";
 
+  // GM mapping (stable links only)
   if(player==="carlsen"){
-  url="https://lichess.org/training"; // strong thinking
+    url="https://lichess.org/";
+  }
+
+  if(player==="anand"){
+    url="https://www.chess.com/play";
+  }
+
+  if(player==="tal"){
+    url="https://lichess.org/training";
+  }
+
+  if(player==="hikaru"){
+    url="https://www.chess.com/play/online";
+  }
+
+  if(player==="fischer"){
+    url="https://lichess.org/";
+  }
+
+  if(player==="kasparov"){
+    url="https://www.chess.com/play";
+  }
+
+  if(player==="ding"){
+    url="https://lichess.org/";
+  }
+
+  if(player==="alireza"){
+    url="https://lichess.org/";
+  }
+
+  if(player==="nepo"){
+    url="https://www.chess.com/play";
+  }
+
+  if(player==="kramnik"){
+    url="https://lichess.org/";
+  }
+
+  // 👉 direct open (same tab)
+  window.location.href = url;
 }
-
-if(player==="tal"){
-  url="https://lichess.org/"; // fast play
-}
-
-if(player==="anand"){
-  url="https://www.chess.com/play"; // balanced
-}
-
-  window.location.href=url;
-
-  let g=localStorage.getItem("games")||0;
-  localStorage.setItem("games",parseInt(g)+1);
-}
-
 // TRAINING
 function startTraining(){
 
