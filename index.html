@@ -183,15 +183,13 @@ Grandmaster की तरह सोचना सीखें — सही च�
 
 <h3>🎯 Guess the Best Move</h3>
 
-<div style="font-size:40px; margin:20px;">
-♔ ♕ ♖ ♗ ♘ ♙
-</div>
+<div id="trainerBoard" style="width:320px; margin:20px auto;"></div>
 
-<p>Position: White to move</p>
+<p>White to move — Best move क्या है?</p>
 
 <button onclick="checkMove('e4')">e4</button>
+<button onclick="checkMove('d4')">d4</button>
 <button onclick="checkMove('h4')">h4</button>
-<button onclick="checkMove('a3')">a3</button>
 
 <p id="result"></p>
 
@@ -286,14 +284,38 @@ function resetStats(){
 
 loadStats();
 
+let trainerGame, trainerBoard;
+
+function loadTrainer(){
+
+  trainerGame = new Chess();
+
+  trainerBoard = Chessboard('trainerBoard', {
+    position: 'start',
+    draggable: false,
+    pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png'
+  });
+
+}
+
+// जब trainer open हो
+function go(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+
+  if(id === "trainer"){
+    setTimeout(loadTrainer, 200);
+  }
+}
+
 function checkMove(move){
 
   let correct = "e4";
 
   if(move === correct){
-    result.innerHTML = "✅ Correct! Center control strong move.";
+    result.innerHTML = "✅ सही! यह center control करता है — GM move";
   } else {
-    result.innerHTML = "❌ Wrong! Best move was e4.";
+    result.innerHTML = "❌ गलत! सही move: e4 (center control सबसे जरूरी)";
   }
 
 }  
