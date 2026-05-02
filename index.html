@@ -13,23 +13,36 @@ body {
   font-family:Arial, sans-serif;
   color:#fff;
   text-align:center;
+
+  /* LIGHT CHESSBOARD BACKGROUND */
   background:
-    linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
-    repeating-linear-gradient(
-      45deg,
-      #2c5364 0px,
-      #2c5364 40px,
-      #203a43 40px,
-      #203a43 80px
-    );
+    linear-gradient(rgba(20,20,20,0.85), rgba(20,20,20,0.85)),
+    linear-gradient(45deg, #dcdcdc 25%, transparent 25%),
+    linear-gradient(-45deg, #dcdcdc 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #dcdcdc 75%),
+    linear-gradient(-45deg, transparent 75%, #dcdcdc 75%);
+  background-size:40px 40px;
+  background-position:0 0, 0 0, 0 20px, 20px -20px, -20px 0px;
 }
 
 /* TITLE */
 h2 {
-  font-size:26px;
-  padding:15px;
+  font-size:28px;
   margin:0;
+  padding:15px 10px;
   font-weight:bold;
+
+  background: linear-gradient(90deg, #ffcc00, #ff9800);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* TITLE BAR */
+.title-bar {
+  height:4px;
+  width:100%;
+  background: linear-gradient(90deg, #ffcc00, #ff9800);
+  margin-bottom:10px;
 }
 
 /* BUTTON */
@@ -37,7 +50,7 @@ button {
   width:90%;
   max-width:340px;
   padding:18px;
-  margin:10px auto 5px;
+  margin:12px auto 6px;
   font-size:20px;
   border:none;
   border-radius:14px;
@@ -46,6 +59,7 @@ button {
   display:block;
 }
 
+/* PRESS EFFECT */
 button:active {
   transform:scale(0.96);
   background:#1565c0;
@@ -55,9 +69,10 @@ button:active {
 .desc {
   width:90%;
   max-width:340px;
-  margin:0 auto 15px;
-  font-size:14px;
-  color:#ddd;
+  margin:0 auto 18px;
+  font-size:16px;
+  line-height:1.5;
+  color:#eee;
 }
 
 /* BACK BUTTON */
@@ -75,31 +90,39 @@ button:active {
   display:block;
 }
 
+/* HEADINGS */
 h3 {
   margin-top:15px;
   color:#ffd54f;
 }
 
 </style>
-
 </head>
 <body>
 
 <h2>♟ TOSHIT CHESS HUB ♟</h2>
+<div class="title-bar"></div>
 <div id="home" class="screen active">
 
 <button onclick="go('play')">▶ Play Like GM</button>
-<div class="desc">Grandmaster style में गेम खेलें और अपनी ताकत बढ़ाएं</div>
+<div class="desc">
+Grandmaster की तरह खेलने के लिए सही प्लेटफॉर्म पर सीधे जाएं और practice करें
+</div>
 
 <button onclick="startTraining()">🧠 Daily Training</button>
-<div class="desc">रोजाना puzzles + game + analysis का पूरा routine</div>
-
+<div class="desc">
+रोजाना training routine: puzzles + game + analysis — जिससे खेल तेजी से improve होगा
+</div>
+  
 <button onclick="go('tools')">⚡ Quick Tools</button>
-<div class="desc">सीधे खेलें, puzzle solve करें या game analyze करें</div>
+<div class="desc">
+Quick tools से तुरंत खेलें, सीखें और अपनी गलतियों को समझें
+</div>
 
 <button onclick="go('stats')">📊 My Progress</button>
-<div class="desc">आज आपने कितना practice किया, देखें</div>
-
+<div class="desc">
+अपनी daily progress देखें और improvement track करें
+</div>
 </div>
 <!-- PLAY -->
 <div id="play" class="screen">
