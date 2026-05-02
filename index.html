@@ -102,6 +102,11 @@ h3 {
   margin-top:20px;
 }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>  
 </head>
 <body>
 
@@ -136,12 +141,18 @@ Grandmaster की तरह सोचना सीखें — सही च�
 </div>
 <!-- PLAY -->
 <div id="play" class="screen">
-<h3>Select Style</h3>
+<h3>Select Grandmaster</h3>
 
 <button onclick="setPlayer('carlsen')">Carlsen</button>
-<button onclick="setPlayer('tal')">Tal</button>
 <button onclick="setPlayer('anand')">Anand</button>
-
+<button onclick="setPlayer('tal')">Tal</button>
+<button onclick="setPlayer('hikaru')">Hikaru</button>
+<button onclick="setPlayer('fischer')">Fischer</button>
+<button onclick="setPlayer('kasparov')">Kasparov</button>
+<button onclick="setPlayer('ding')">Ding</button>
+<button onclick="setPlayer('alireza')">Alireza</button>
+<button onclick="setPlayer('nepo')">Nepo</button>
+<button onclick="setPlayer('kramnik')">Kramnik</button>
 <h3>Select Time</h3>
 
 <button onclick="setTime('blitz')">Blitz</button>
@@ -205,11 +216,16 @@ let player="", time="";
 function go(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
+
+  if(id === "trainer"){
+    setTimeout(loadTrainer, 200);
+  }
 }
 
 // selections
 function setPlayer(p){
-  player=p;
+  player = p;
+  alert("Selected: " + p);
 }
 
 function setTime(t){
@@ -324,15 +340,6 @@ function loadTrainer(){
 
 }
 
-// जब trainer open हो
-function go(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-
-  if(id === "trainer"){
-    setTimeout(loadTrainer, 200);
-  }
-}
 
 function checkMove(move){
 
