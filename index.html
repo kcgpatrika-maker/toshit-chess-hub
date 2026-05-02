@@ -124,6 +124,11 @@ Grandmaster की तरह खेलने के लिए सही प्�
 Quick tools से तुरंत खेलें, सीखें और अपनी गलतियों को समझें
 </div>
 
+<button onclick="go('trainer')">🎯 Guess Move Trainer</button>
+<div class="desc">
+Grandmaster की तरह सोचना सीखें — सही चाल पहचानें
+</div>
+  
 <button onclick="go('stats')">📊 My Progress</button>
 <div class="desc">
 अपनी daily progress देखें और improvement track करें
@@ -174,6 +179,26 @@ Quick tools से तुरंत खेलें, सीखें और अ�
 <button class="back" onclick="go('home')">⬅ Back</button>
 </div>
 
+<div id="trainer" class="screen">
+
+<h3>🎯 Guess the Best Move</h3>
+
+<div style="font-size:40px; margin:20px;">
+♔ ♕ ♖ ♗ ♘ ♙
+</div>
+
+<p>Position: White to move</p>
+
+<button onclick="checkMove('e4')">e4</button>
+<button onclick="checkMove('h4')">h4</button>
+<button onclick="checkMove('a3')">a3</button>
+
+<p id="result"></p>
+
+<button class="back" onclick="go('home')">⬅ Back</button>
+
+</div>  
+  
 <script>
 
 let player="", time="";
@@ -261,6 +286,17 @@ function resetStats(){
 
 loadStats();
 
+function checkMove(move){
+
+  let correct = "e4";
+
+  if(move === correct){
+    result.innerHTML = "✅ Correct! Center control strong move.";
+  } else {
+    result.innerHTML = "❌ Wrong! Best move was e4.";
+  }
+
+}  
 </script>
 
 </body>
