@@ -95,7 +95,12 @@ h3 {
   margin-top:15px;
   color:#ffd54f;
 }
-
+.start-btn {
+  background: linear-gradient(90deg, #00c853, #64dd17);
+  font-weight:bold;
+  font-size:22px;
+  margin-top:20px;
+}
 </style>
 </head>
 <body>
@@ -138,7 +143,7 @@ Quick tools से तुरंत खेलें, सीखें और अ�
 <button onclick="setTime('rapid')">Rapid</button>
 <button onclick="setTime('classical')">Classical</button>
 
-<button onclick="startGame()">🚀 Start Game</button>
+<button class="start-btn" onclick="startGame()">🚀 START GAME</button>
 <button class="back" onclick="go('home')">⬅ Back</button>
 </div>
 
@@ -199,16 +204,16 @@ function startGame(){
   let url="";
 
   if(player==="carlsen"){
-    url="https://www.chess.com/play/computer";
-  }
+  url="https://lichess.org/training"; // strong thinking
+}
 
-  if(player==="tal"){
-    url="https://lichess.org/play/computer";
-  }
+if(player==="tal"){
+  url="https://lichess.org/"; // fast play
+}
 
-  if(player==="anand"){
-    url="https://www.chess.com/play";
-  }
+if(player==="anand"){
+  url="https://www.chess.com/play"; // balanced
+}
 
   window.location.href=url;
 
