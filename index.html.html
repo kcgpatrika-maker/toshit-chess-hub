@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toshit Chess Hub</title>
+
+<style>
+body {
+  background:#111;
+  color:#fff;
+  font-family:Arial;
+  text-align:center;
+  margin:0;
+}
+
+h2 { margin:15px 0; }
+
+button {
+  width:90%;
+  max-width:320px;
+  padding:16px;
+  margin:10px;
+  font-size:18px;
+  border-radius:10px;
+  border:none;
+}
+
+.screen { display:none; }
+.active { display:block; }
+
+.card {
+  margin:10px auto;
+  padding:10px;
+}
+</style>
+
+</head>
+<body>
+
+<h2>♟ Toshit Chess Hub</h2>
+
+<div id="home" class="screen active">
+<button onclick="go('play')">▶ Play Like GM</button>
+<button onclick="startTraining()">🧠 Daily Training</button>
+<button onclick="go('tools')">⚡ Quick Tools</button>
+<button onclick="go('stats')">📊 My Progress</button>
+</div>
+
+<!-- PLAY -->
+<div id="play" class="screen">
+<h3>Select Style</h3>
+
+<button onclick="setPlayer('carlsen')">Carlsen</button>
+<button onclick="setPlayer('tal')">Tal</button>
+<button onclick="setPlayer('anand')">Anand</button>
+
+<h3>Select Time</h3>
+
+<button onclick="setTime('blitz')">Blitz</button>
+<button onclick="setTime('rapid')">Rapid</button>
+<button onclick="setTime('classical')">Classical</button>
+
+<button onclick="startGame()">🚀 Start Game</button>
+<button onclick="go('home')">⬅ Back</button>
+</div>
+
+<!-- TOOLS -->
+<div id="tools" class="screen">
+<h3>Quick Tools</h3>
+
+<button onclick="openGame()">▶ Play Game</button>
+<button onclick="openPuzzle()">🧠 Solve Puzzle</button>
+<button onclick="openAnalysis()">📊 Analyze</button>
+
+<button onclick="go('home')">⬅ Back</button>
+</div>
+
+<!-- STATS -->
+<div id="stats" class="screen">
+<h3>My Progress</h3>
+
+<p>Games: <span id="games">0</span></p>
+<p>Puzzles: <span id="puzzles">0</span></p>
+
+<button onclick="resetStats()">Reset</button>
+<button onclick="go('home')">⬅ Back</button>
+</div>
+
+<script>
+
+let player="", time="";
+
+// navigation
+function go(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+// selections
+function setPlayer(p){
+  player=p;
+}
+
+function setTime(t){
+  time=t;
+}
+
+// START GAME
+function startGame(){
+
+  if(player===""){
+    alert("Select Player");
+    return;
+  }
+
+  let url="";
+
+  if(player==="carlsen"){
+    url="https://www.chess.com/play/computer";
+  }
+
+  if(player==="tal"){
+    url="https://lichess.org/play/computer";
+  }
+
+  if(player==="anand"){
+    url="https://www.chess.com/play";
+  }
+
+  window.location.href=url;
+
+  let g=localStorage.getItem("games")||0;
+  localStorage.setItem("games",parseInt(g)+1);
+}
+
+// TRAINING
+function startTraining(){
+
+  window.open("https://lichess.org/training","_blank");
+
+  setTimeout(()=>{
+    window.open("https://www.chess.com/play/computer","_blank");
+  },3000);
+
+  setTimeout(()=>{
+    window.open("https://lichess.org/analysis","_blank");
+  },6000);
+}
+
+// TOOLS
+function openGame(){
+  window.location.href="https://www.chess.com/play";
+}
+
+function openPuzzle(){
+  window.location.href="https://lichess.org/training";
+}
+
+function openAnalysis(){
+  window.location.href="https://lichess.org/analysis";
+}
+
+// stats
+function loadStats(){
+  games.innerText=localStorage.getItem("games")||0;
+  puzzles.innerText=localStorage.getItem("puzzles")||0;
+}
+
+function resetStats(){
+  localStorage.clear();
+  loadStats();
+}
+
+loadStats();
+
+</script>
+
+</body>
+</html>
