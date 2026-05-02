@@ -3,36 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f2027">
 <title>Toshit Chess Hub</title>
 
 <style>
+
 body {
-  background:#111;
-  color:#fff;
-  font-family:Arial;
-  text-align:center;
   margin:0;
+  font-family:Arial, sans-serif;
+  background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
+  color:#fff;
+  text-align:center;
 }
 
-h2 { margin:15px 0; }
+h2 {
+  padding:15px;
+  margin:0;
+  font-size:22px;
+  background: rgba(0,0,0,0.3);
+}
 
 button {
   width:90%;
   max-width:320px;
   padding:16px;
-  margin:10px;
-  font-size:18px;
-  border-radius:10px;
-  border:none;
-}
-
-.screen { display:none; }
-.active { display:block; }
-
-.card {
   margin:10px auto;
-  padding:10px;
+  font-size:18px;
+  border:none;
+  border-radius:12px;
+  background: #1e88e5;
+  color:#fff;
+  display:block;
+  transition:0.2s;
 }
+
+button:active {
+  transform:scale(0.96);
+  background:#1565c0;
+}
+
+.back {
+  background:#444;
+}
+
+.screen {
+  display:none;
+  padding:15px;
+}
+
+.active {
+  display:block;
+}
+
+p {
+  font-size:18px;
+}
+
+h3 {
+  margin-top:15px;
+  color:#ffd54f;
+}
+
 </style>
 
 </head>
@@ -62,7 +93,7 @@ button {
 <button onclick="setTime('classical')">Classical</button>
 
 <button onclick="startGame()">🚀 Start Game</button>
-<button onclick="go('home')">⬅ Back</button>
+<button class="back" onclick="go('home')">⬅ Back</button>
 </div>
 
 <!-- TOOLS -->
@@ -73,7 +104,7 @@ button {
 <button onclick="openPuzzle()">🧠 Solve Puzzle</button>
 <button onclick="openAnalysis()">📊 Analyze</button>
 
-<button onclick="go('home')">⬅ Back</button>
+<button class="back" onclick="go('home')">⬅ Back</button>
 </div>
 
 <!-- STATS -->
@@ -84,7 +115,7 @@ button {
 <p>Puzzles: <span id="puzzles">0</span></p>
 
 <button onclick="resetStats()">Reset</button>
-<button onclick="go('home')">⬅ Back</button>
+<button class="back" onclick="go('home')">⬅ Back</button>
 </div>
 
 <script>
