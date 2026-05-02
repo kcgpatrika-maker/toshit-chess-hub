@@ -105,11 +105,11 @@ h3 {
   background:#fff;
 }  
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css">
+<link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/www/css/chessboard.css">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+<script src="https://unpkg.com/chess.js@0.10.3/chess.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>  
+<script src="https://unpkg.com/chessboardjs@1.0.0/www/js/chessboard.js"></script>  
 </head>
 <body>
 
@@ -329,11 +329,8 @@ function resetStats(){
 
 loadStats();
 
-let trainerGame, trainerBoard;
-
 function loadTrainer(){
 
-  // पुराना board destroy
   if (trainerBoard) {
     trainerBoard.destroy();
   }
