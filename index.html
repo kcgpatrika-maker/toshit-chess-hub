@@ -11,30 +11,39 @@
 body {
   margin:0;
   font-family:Arial, sans-serif;
-  background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
   color:#fff;
   text-align:center;
+  background:
+    linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+    repeating-linear-gradient(
+      45deg,
+      #2c5364 0px,
+      #2c5364 40px,
+      #203a43 40px,
+      #203a43 80px
+    );
 }
 
+/* TITLE */
 h2 {
+  font-size:26px;
   padding:15px;
   margin:0;
-  font-size:22px;
-  background: rgba(0,0,0,0.3);
+  font-weight:bold;
 }
 
+/* BUTTON */
 button {
   width:90%;
-  max-width:320px;
-  padding:16px;
-  margin:10px auto;
-  font-size:18px;
+  max-width:340px;
+  padding:18px;
+  margin:10px auto 5px;
+  font-size:20px;
   border:none;
-  border-radius:12px;
-  background: #1e88e5;
+  border-radius:14px;
+  background:#1e88e5;
   color:#fff;
   display:block;
-  transition:0.2s;
 }
 
 button:active {
@@ -42,21 +51,28 @@ button:active {
   background:#1565c0;
 }
 
+/* DESCRIPTION TEXT */
+.desc {
+  width:90%;
+  max-width:340px;
+  margin:0 auto 15px;
+  font-size:14px;
+  color:#ddd;
+}
+
+/* BACK BUTTON */
 .back {
   background:#444;
 }
 
+/* SCREEN */
 .screen {
   display:none;
-  padding:15px;
+  padding:10px;
 }
 
 .active {
   display:block;
-}
-
-p {
-  font-size:18px;
 }
 
 h3 {
@@ -69,15 +85,22 @@ h3 {
 </head>
 <body>
 
-<h2>♟ Toshit Chess Hub</h2>
-
+<h2>♟ TOSHIT CHESS HUB ♟</h2>
 <div id="home" class="screen active">
-<button onclick="go('play')">▶ Play Like GM</button>
-<button onclick="startTraining()">🧠 Daily Training</button>
-<button onclick="go('tools')">⚡ Quick Tools</button>
-<button onclick="go('stats')">📊 My Progress</button>
-</div>
 
+<button onclick="go('play')">▶ Play Like GM</button>
+<div class="desc">Grandmaster style में गेम खेलें और अपनी ताकत बढ़ाएं</div>
+
+<button onclick="startTraining()">🧠 Daily Training</button>
+<div class="desc">रोजाना puzzles + game + analysis का पूरा routine</div>
+
+<button onclick="go('tools')">⚡ Quick Tools</button>
+<div class="desc">सीधे खेलें, puzzle solve करें या game analyze करें</div>
+
+<button onclick="go('stats')">📊 My Progress</button>
+<div class="desc">आज आपने कितना practice किया, देखें</div>
+
+</div>
 <!-- PLAY -->
 <div id="play" class="screen">
 <h3>Select Style</h3>
@@ -101,8 +124,13 @@ h3 {
 <h3>Quick Tools</h3>
 
 <button onclick="openGame()">▶ Play Game</button>
+<div class="desc">सीधे chess game खेलें</div>
+
 <button onclick="openPuzzle()">🧠 Solve Puzzle</button>
+<div class="desc">दिमाग तेज करने के लिए puzzles</div>
+
 <button onclick="openAnalysis()">📊 Analyze</button>
+<div class="desc">अपने game की गलतियां देखें</div>
 
 <button class="back" onclick="go('home')">⬅ Back</button>
 </div>
