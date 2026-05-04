@@ -1,256 +1,444 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" 
+
+content="width=device-width, initial-
+
+scale=1.0">
+<meta name="theme-color" 
+
+content="#0f2027">
 <title>Toshit Chess Hub</title>
 
 <style>
+
 body {
   margin:0;
-  font-family:Arial;
-  background:#111;
+  font-family:Arial, sans-serif;
   color:#fff;
   text-align:center;
+
+  /* LIGHT CHESSBOARD 
+
+BACKGROUND */
+  background:
+    linear-gradient(rgba
+
+(20,20,20,0.85), rgba(20,20,20,0.85)),
+    linear-gradient(45deg, #dcdcdc 
+
+25%, transparent 25%),
+    linear-gradient(-45deg, #dcdcdc 
+
+25%, transparent 25%),
+    linear-gradient(45deg, 
+
+transparent 75%, #dcdcdc 75%),
+    linear-gradient(-45deg, 
+
+transparent 75%, #dcdcdc 75%);
+  background-size:40px 40px;
+  background-position:0 0, 0 0, 0 
+
+20px, 20px -20px, -20px 0px;
 }
 
+/* TITLE */
 h2 {
-  color:#ffcc00;
-  padding:15px;
+  font-size:28px;
+  margin:0;
+  padding:15px 10px;
+  font-weight:bold;
+
+  background: linear-gradient(90deg, 
+
+#ffcc00, #ff9800);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
+/* TITLE BAR */
+.title-bar {
+  height:4px;
+  width:100%;
+  background: linear-gradient(90deg, 
+
+#ffcc00, #ff9800);
+  margin-bottom:10px;
+}
+
+/* BUTTON */
 button {
   width:90%;
   max-width:340px;
-  padding:15px;
-  margin:8px auto;
-  font-size:18px;
+  padding:18px;
+  margin:12px auto 6px;
+  font-size:20px;
   border:none;
-  border-radius:10px;
+  border-radius:14px;
   background:#1e88e5;
   color:#fff;
   display:block;
 }
 
+/* PRESS EFFECT */
 button:active {
   transform:scale(0.96);
+  background:#1565c0;
 }
 
-.start-btn {
-  background:linear-gradient(90deg,#00c853,#64dd17);
-  font-size:20px;
+/* DESCRIPTION TEXT */
+.desc {
+  width:90%;
+  max-width:340px;
+  margin:0 auto 18px;
+  font-size:16px;
+  line-height:1.5;
+  color:#eee;
 }
 
+/* BACK BUTTON */
 .back {
   background:#444;
 }
 
-.screen { display:none; }
-.active { display:block; }
-
-.desc {
-  width:90%;
-  max-width:340px;
-  margin:0 auto 10px;
-  font-size:14px;
-  color:#ccc;
+/* SCREEN */
+.screen {
+  display:none;
+  padding:10px;
 }
 
-/* review buttons */
-.opt {
-  background:#333;
+.active {
+  display:block;
 }
-.opt.selected {
-  background:#00c853;
+
+/* HEADINGS */
+h3 {
+  margin-top:15px;
+  color:#ffd54f;
 }
+.start-btn {
+  background: linear-gradient(90deg, 
+
+#00c853, #64dd17);
+  font-weight:bold;
+  font-size:22px;
+  margin-top:20px;
+}
+#trainerBoard {
+  background:#fff;
+}  
 </style>
 </head>
-
 <body>
 
-<h2>♔ ♕ ♙ TOSHIT CHESS HUB ♖ ♘ ♗</h2>
+<h2>♕♔ TOSHIT CHESS HUB 
 
-<!-- HOME -->
-<div id="home" class="screen active">
+♘♖</h2>
+<div class="title-bar"></div>
+<div id="home" class="screen 
 
-<button onclick="go('play')">▶ Play Like GM</button>
-<div class="desc">GM style में game खेलें</div>
+active">
 
-<button onclick="startTraining()">🧠 Daily Training</button>
-<div class="desc">Puzzle → Game → Review</div>
+<button onclick="go('play')">▶ Play 
 
-<button onclick="go('tools')">⚡ Quick Tools</button>
-<div class="desc">Game / Puzzle / Analysis</div>
+Like GM</button>
+<div class="desc">
+Grandmaster की तरह खेलने के लिए 
 
-<button onclick="go('stats')">📊 My Progress</button>
-<div class="desc">Games & Reviews count</div>
+सही प्लेटफॉर्म पर सीधे जाएं और practice 
 
+करें
 </div>
 
+<button onclick="startTraining()">🧠 
+
+Daily Training</button>
+<div class="desc">
+रोजाना training routine: puzzles + 
+
+game + analysis — जिससे खेल तेजी से 
+
+improve होगा
+</div>
+  
+<button onclick="go('tools')">⚡ Quick 
+
+Tools</button>
+<div class="desc">
+Quick tools से तुरंत खेलें, सीखें और 
+
+अपनी गलतियों को समझें
+</div>
+
+<button onclick="go('stats')">📊 My 
+
+Progress</button>
+<div class="desc">
+अपनी daily progress देखें और 
+
+improvement track करें
+</div>
+</div>
 <!-- PLAY -->
 <div id="play" class="screen">
+<h3>Select Grandmaster</h3>
 
-<h3>Select GM</h3>
+<button onclick="setPlayer
 
-<button onclick="setPlayer('carlsen')">Carlsen</button>
-<button onclick="setPlayer('anand')">Anand</button>
-<button onclick="setPlayer('tal')">Tal</button>
+('carlsen')">Carlsen</button>
+<button onclick="setPlayer
 
-<button class="start-btn" onclick="startGame()">START GAME</button>
-<button class="back" onclick="go('home')">Back</button>
+('anand')">Anand</button>
+<button onclick="setPlayer
 
+('tal')">Tal</button>
+<button onclick="setPlayer
+
+('hikaru')">Hikaru</button>
+<button onclick="setPlayer
+
+('fischer')">Fischer</button>
+<button onclick="setPlayer
+
+('kasparov')">Kasparov</button>
+<button onclick="setPlayer
+
+('ding')">Ding</button>
+<button onclick="setPlayer
+
+('alireza')">Alireza</button>
+<button onclick="setPlayer
+
+('nepo')">Nepo</button>
+<button onclick="setPlayer
+
+('kramnik')">Kramnik</button>
+<h3>Select Time</h3>
+
+<button onclick="setTime
+
+('blitz')">Blitz</button>
+<button onclick="setTime
+
+('rapid')">Rapid</button>
+<button onclick="setTime
+
+('classical')">Classical</button>
+
+<button class="start-btn" 
+
+onclick="startGame()">🚀 START 
+
+GAME</button>
+<button class="back" onclick="go
+
+('home')">⬅ Back</button>
 </div>
 
 <!-- TOOLS -->
 <div id="tools" class="screen">
-
 <h3>Quick Tools</h3>
 
-<button onclick="playGame()">Play Game</button>
-<button onclick="openPuzzle()">Solve Puzzle</button>
-<button onclick="openAnalysis()">Analyze</button>
+<button onclick="openGame()">▶ 
 
-<button class="back" onclick="go('home')">Back</button>
+Play Game</button>
+<div class="desc">सीधे chess game 
 
-</div>
+खेलें</div>
 
-<!-- REVIEW -->
-<div id="review" class="screen">
+<button onclick="openPuzzle()">🧠 
 
-<h3>📊 Game Review (2 min)</h3>
+Solve Puzzle</button>
+<div class="desc">दिमाग तेज करने के 
 
-<p>❌ Biggest Mistake?</p>
-<button class="opt" onclick="selectOpt(1,this)">Blunder</button>
-<button class="opt" onclick="selectOpt(1,this)">Time Pressure</button>
-<button class="opt" onclick="selectOpt(1,this)">Opening Mistake</button>
+लिए puzzles</div>
 
-<p>⚠️ Missed Opportunity?</p>
-<button class="opt" onclick="selectOpt(2,this)">Mate Miss</button>
-<button class="opt" onclick="selectOpt(2,this)">Capture Miss</button>
-<button class="opt" onclick="selectOpt(2,this)">Better Move</button>
+<button onclick="openAnalysis()">📊 
 
-<p>✔ Best Part?</p>
-<button class="opt" onclick="selectOpt(3,this)">Good Attack</button>
-<button class="opt" onclick="selectOpt(3,this)">Solid Defense</button>
-<button class="opt" onclick="selectOpt(3,this)">Lucky Win</button>
+Analyze</button>
+<div class="desc">अपने game की 
 
-<button onclick="openAnalysis()">🔍 Analyze Game</button>
+गलतियां देखें</div>
 
-<button id="finishBtn" class="start-btn" disabled onclick="finishReview()">Finish Review</button>
+<button class="back" onclick="go
 
+('home')">⬅ Back</button>
 </div>
 
 <!-- STATS -->
 <div id="stats" class="screen">
-
 <h3>My Progress</h3>
 
-<p>Games: <span id="games">0</span></p>
-<p>Reviews: <span id="reviews">0</span></p>
+<p>Games: <span 
 
-<button onclick="resetStats()">Reset</button>
-<button class="back" onclick="go('home')">Back</button>
+id="games">0</span></p>
+<p>Puzzles: <span 
 
+id="puzzles">0</span></p>
+
+<button onclick="resetStats
+
+()">Reset</button>
+<button class="back" onclick="go
+
+('home')">⬅ Back</button>
 </div>
 
+</div>  
+  
 <script>
 
-let player="";
-let reviewData = {1:false,2:false,3:false};
+let player="", time="";
 
 // navigation
 function go(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
 
-// PLAYER
+  document.querySelectorAll
+
+(".screen").forEach
+
+(s=>s.classList.remove("active"));
+  document.getElementById
+
+(id).classList.add("active");
+
+  // 👉 CRITICAL FIX (delay बढ़ाया)
+  if(id === "trainer"){
+    setTimeout(loadTrainer, 500);
+  }
+}
+// selections
 function setPlayer(p){
-  player=p;
-  alert("Selected: "+p);
+  player = p;
+  alert("Selected: " + p);
 }
 
-// START GAME (GM)
+function setTime(t){
+  time=t;
+}
+
+// START GAME
 function startGame(){
 
   if(player===""){
-    alert("Select GM");
+    alert("Select Grandmaster");
     return;
   }
 
-  localStorage.setItem("needReview","yes");
+  let url="";
 
-  window.location.href="https://www.chess.com/play";
+  // GM mapping (stable links only)
+  if(player==="carlsen"){
+    url="https://lichess.org/";
+  }
+
+  if(player==="anand"){
+    url="https://www.chess.com/play";
+  }
+
+  if(player==="tal"){
+    url="https://lichess.org/training";
+  }
+
+  if(player==="hikaru"){
+    
+
+url="https://www.chess.com/play/onlin
+
+e";
+  }
+
+  if(player==="fischer"){
+    url="https://lichess.org/";
+  }
+
+  if(player==="kasparov"){
+    url="https://www.chess.com/play";
+  }
+
+  if(player==="ding"){
+    url="https://lichess.org/";
+  }
+
+  if(player==="alireza"){
+    url="https://lichess.org/";
+  }
+
+  if(player==="nepo"){
+    url="https://www.chess.com/play";
+  }
+
+  if(player==="kramnik"){
+    url="https://lichess.org/";
+  }
+
+  // 👉 direct open (same tab)
+  window.location.href = url;
 }
-
-// DAILY TRAINING
+// TRAINING
 function startTraining(){
 
-  localStorage.setItem("needReview","yes");
+  window.open
 
-  window.open("https://lichess.org/training","_blank");
+("https://lichess.org/training","_blank");
 
   setTimeout(()=>{
-    window.open("https://www.chess.com/play/computer","_blank");
-  },3000);
-}
+    window.open
 
-// QUICK GAME
-function playGame(){
-  localStorage.setItem("needReview","yes");
-  window.location.href="https://www.chess.com/play";
+("https://www.chess.com/play/compute
+
+r","_blank");
+  },3000);
+
+  setTimeout(()=>{
+    window.open
+
+("https://lichess.org/analysis","_blank")
+
+;
+  },6000);
 }
 
 // TOOLS
+function openGame(){
+  
+
+window.location.href="https://www.che
+
+ss.com/play";
+}
+
 function openPuzzle(){
-  window.location.href="https://lichess.org/training";
+  
+
+window.location.href="https://lichess.o
+
+rg/training";
 }
 
 function openAnalysis(){
-  window.location.href="https://lichess.org/analysis";
+  
+
+window.location.href="https://lichess.o
+
+rg/analysis";
 }
 
-// REVIEW OPTIONS
-function selectOpt(group, el){
-
-  document.querySelectorAll(".opt").forEach(b=>{
-    if(b.parentElement === el.parentElement){
-      b.classList.remove("selected");
-    }
-  });
-
-  el.classList.add("selected");
-  reviewData[group]=true;
-
-  checkFinish();
-}
-
-// ENABLE FINISH
-function checkFinish(){
-  if(reviewData[1] && reviewData[2] && reviewData[3]){
-    document.getElementById("finishBtn").disabled=false;
-  }
-}
-
-// FINISH REVIEW
-function finishReview(){
-
-  let g = parseInt(localStorage.getItem("games")||0);
-  let r = parseInt(localStorage.getItem("reviews")||0);
-
-  localStorage.setItem("games", g+1);
-  localStorage.setItem("reviews", r+1);
-
-  localStorage.removeItem("needReview");
-
-  loadStats();
-  go("home");
-}
-
-// STATS
+// stats
 function loadStats(){
-  document.getElementById("games").innerText = localStorage.getItem("games")||0;
-  document.getElementById("reviews").innerText = localStorage.getItem("reviews")||0;
+  
+
+games.innerText=localStorage.getIte
+
+m("games")||0;
+  
+
+puzzles.innerText=localStorage.getIte
+
+m("puzzles")||0;
 }
 
 function resetStats(){
@@ -258,15 +446,7 @@ function resetStats(){
   loadStats();
 }
 
-// AUTO REVIEW TRIGGER
-window.onload = function(){
-
-  loadStats();
-
-  if(localStorage.getItem("needReview") === "yes"){
-    go("review");
-  }
-};
+loadStats();
 
 </script>
 
