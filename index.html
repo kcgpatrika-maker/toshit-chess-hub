@@ -138,6 +138,9 @@ Quick tools से तुरंत खेलें, सीखें और अ�
 <div class="desc">
 अपनी daily progress देखें और improvement track करें
 </div>
+<button onclick="openProfile()">👤 My Chess Profile</button>
+<div class="desc">अपना Chess.com प्रोफाइल देखें
+</div>
 </div>
 <!-- PLAY -->
 <div id="play" class="screen">
@@ -379,7 +382,25 @@ window.onload = function(){
     go("review");
   }
 };
+function changeProfile(){
+  localStorage.removeItem("chessUser");
+  openProfile();
+}
+  
+function openProfile(){
 
+  let username = localStorage.getItem("chessUser");
+
+  if(!username){
+    username = prompt("Enter your Chess.com username:");
+
+    if(!username) return;
+
+    localStorage.setItem("chessUser", username);
+  }
+
+  window.open("https://www.chess.com/member/" + username, "_blank");
+}
 </script>
 
 </body>
