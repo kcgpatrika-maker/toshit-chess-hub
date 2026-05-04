@@ -103,6 +103,13 @@ h3 {
 }
 #trainerBoard {
   background:#fff;
+}
+/* review buttons */
+.opt {
+  background:#333;
+}
+.opt.selected {
+  background:#00c853;
 }  
 </style>
 </head>
@@ -171,6 +178,31 @@ Quick tools से तुरंत खेलें, सीखें और अ�
 
 <button class="back" onclick="go('home')">⬅ Back</button>
 </div>
+<!-- REVIEW -->
+<div id="review" class="screen">
+
+<h3>📊 Game Review (2 min)</h3>
+
+<p>❌ Biggest Mistake?</p>
+<button class="opt" onclick="selectOpt(1,this)">Blunder</button>
+<button class="opt" onclick="selectOpt(1,this)">Time Pressure</button>
+<button class="opt" onclick="selectOpt(1,this)">Opening Mistake</button>
+
+<p>⚠️ Missed Opportunity?</p>
+<button class="opt" onclick="selectOpt(2,this)">Mate Miss</button>
+<button class="opt" onclick="selectOpt(2,this)">Capture Miss</button>
+<button class="opt" onclick="selectOpt(2,this)">Better Move</button>
+
+<p>✔ Best Part?</p>
+<button class="opt" onclick="selectOpt(3,this)">Good Attack</button>
+<button class="opt" onclick="selectOpt(3,this)">Solid Defense</button>
+<button class="opt" onclick="selectOpt(3,this)">Lucky Win</button>
+
+<button onclick="openAnalysis()">🔍 Analyze Game</button>
+
+<button id="finishBtn" class="start-btn" disabled onclick="finishReview()">Finish Review</button>
+
+</div>
 
 <!-- STATS -->
 <div id="stats" class="screen">
@@ -188,6 +220,7 @@ Quick tools से तुरंत खेलें, सीखें और अ�
 <script>
 
 let player="", time="";
+let reviewData = {1:false,2:false,3:false};
 
 // navigation
 function go(id){
@@ -290,7 +323,43 @@ function openPuzzle(){
 function openAnalysis(){
   window.location.href="https://lichess.org/analysis";
 }
+// REVIEW OPTIONS
+function selectOpt(group, el){
 
+  document.querySelectorAll(".opt").forEach(b=>{
+    if(b.parentElement === el.parentElement){
+      b.classList.remove("selected");
+    }
+  });
+
+  el.classList.add("selected");
+  reviewData[group]=true;
+
+  checkFinish();
+}
+
+// ENABLE FINISH
+function checkFinish(){
+  if(reviewData[1] && reviewData[2] && reviewData[3]){
+    document.getElementById("finishBtn").disabled=false;
+  }
+}
+
+// FINISH REVIEW
+function finishReview(){
+
+  let g = parseInt(localStorage.getItem("games")||0);
+  let r = parseInt(localStorage.getItem("reviews")||0);
+
+  localStorage.setItem("games", g+1);
+  localStorage.setItem("reviews", r+1);
+
+  localStorage.removeItem("needReview");
+
+  loadStats();
+  go("home");
+}
+  
 // stats
 function loadStats(){
   games.innerText=localStorage.getItem("games")||0;
@@ -301,8 +370,15 @@ function resetStats(){
   localStorage.clear();
   loadStats();
 }
+// AUTO REVIEW TRIGGER
+window.onload = function(){
 
-loadStats();
+  loadStats();
+
+  if(localStorage.getItem("needReview") === "yes"){
+    go("review");
+  }
+};
 
 </script>
 
