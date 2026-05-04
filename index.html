@@ -14,12 +14,14 @@ body {
   background:#111;
 }
 
+/* TITLE */
 h2 {
   font-size:26px;
   padding:15px;
   color:#ffcc00;
 }
 
+/* BUTTON */
 button {
   width:90%;
   max-width:340px;
@@ -33,9 +35,21 @@ button {
   display:block;
 }
 
+.start-btn {
+  background: linear-gradient(90deg, #00c853, #64dd17);
+  font-size:20px;
+  font-weight:bold;
+}
+
+.back {
+  background:#444;
+}
+
+/* SCREEN */
 .screen { display:none; }
 .active { display:block; }
 
+/* TRAINER BOARD (NO LIBRARY — ALWAYS WORKS) */
 #trainerBoard {
   width:320px;
   height:320px;
@@ -55,6 +69,14 @@ button {
 
 .white { background:#eee; color:#000; }
 .black { background:#555; }
+
+.desc {
+  width:90%;
+  max-width:340px;
+  margin:0 auto 10px;
+  font-size:15px;
+  color:#ddd;
+}
 </style>
 </head>
 
@@ -62,65 +84,90 @@ button {
 
 <h2>♔ ♕ ♙ TOSHIT CHESS HUB ♖ ♘ ♗</h2>
 
+<!-- HOME -->
 <div id="home" class="screen active">
 
 <button onclick="go('play')">▶ Play Like GM</button>
+<div class="desc">Grandmaster style में real platform पर खेलें</div>
+
+<button onclick="startTraining()">🧠 Daily Training</button>
+<div class="desc">Puzzle + Game + Analysis routine</div>
 
 <button onclick="go('trainer')">🎯 Guess Move Trainer</button>
+<div class="desc">Best move पहचानना सीखें</div>
 
 </div>
 
 <!-- PLAY -->
 <div id="play" class="screen">
 
-<h3>Select GM</h3>
+<h3>Select Grandmaster</h3>
 
 <button onclick="setPlayer('carlsen')">Carlsen</button>
 <button onclick="setPlayer('anand')">Anand</button>
 <button onclick="setPlayer('tal')">Tal</button>
+<button onclick="setPlayer('hikaru')">Hikaru</button>
 
-<button onclick="startGame()">🚀 START</button>
-<button onclick="go('home')">⬅ Back</button>
+<h3>Select Time</h3>
+
+<button onclick="setTime('blitz')">Blitz</button>
+<button onclick="setTime('rapid')">Rapid</button>
+
+<button class="start-btn" onclick="startGame()">🚀 START GAME</button>
+<button class="back" onclick="go('home')">⬅ Back</button>
 
 </div>
 
 <!-- TRAINER -->
 <div id="trainer" class="screen">
 
-<h3>Guess Best Move</h3>
+<h3>🎯 Guess the Best Move</h3>
 
 <div id="trainerBoard"></div>
 
-<p>White to move</p>
+<p>White to move — Best move क्या है?</p>
 
-<button onclick="checkMove('e4')">e4</button>
-<button onclick="checkMove('d4')">d4</button>
-<button onclick="checkMove('h4')">h4</button>
+<button onclick="checkMove('Qg7')">Qg7#</button>
+<button onclick="checkMove('Qh7')">Qh7</button>
+<button onclick="checkMove('Qe8')">Qe8</button>
 
 <p id="result"></p>
 
-<button onclick="go('home')">⬅ Back</button>
+<button class="back" onclick="go('home')">⬅ Back</button>
 
 </div>
 
 <script>
 
-let player="";
+let player="", time="";
 
+// navigation
 function go(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 
   if(id==="trainer"){
-    loadBoard();
+    loadPuzzle();
   }
 }
 
+// selection
 function setPlayer(p){
   player=p;
+  alert("Selected: " + p);
 }
 
+function setTime(t){
+  time=t;
+}
+
+// START GAME (GM redirect)
 function startGame(){
+
+  if(player===""){
+    alert("Select Grandmaster");
+    return;
+  }
 
   if(player==="carlsen"){
     window.location.href="https://lichess.org/";
@@ -131,23 +178,37 @@ function startGame(){
   else if(player==="tal"){
     window.location.href="https://lichess.org/training";
   }
+  else if(player==="hikaru"){
+    window.location.href="https://www.chess.com/play/online";
+  }
 }
 
-// ✅ NO LIBRARY BOARD (100% WORKING)
-function loadBoard(){
+// TRAINING
+function startTraining(){
+
+  window.open("https://lichess.org/training","_blank");
+
+  setTimeout(()=>{
+    window.open("https://www.chess.com/play/computer","_blank");
+  },3000);
+}
+
+// ✅ PUZZLE BOARD (NO LIBRARY — STABLE)
+function loadPuzzle(){
 
   let board = document.getElementById("trainerBoard");
   board.innerHTML="";
 
+  // PUZZLE POSITION (Mate in 1)
   let pieces = [
-    "♜","♞","♝","♛","♚","♝","♞","♜",
-    "♟","♟","♟","♟","♟","♟","♟","♟",
+    "","","","","♚","","","",
+    "","","","","","","♟","",
+    "","","","","","","","",
+    "","","","","","","","♕",
     "","","","","","","","",
     "","","","","","","","",
     "","","","","","","","",
-    "","","","","","","","",
-    "♙","♙","♙","♙","♙","♙","♙","♙",
-    "♖","♘","♗","♕","♔","♗","♘","♖"
+    "","","","","♔","","",""
   ];
 
   for(let i=0;i<64;i++){
@@ -157,22 +218,20 @@ function loadBoard(){
     let col = i%8;
 
     sq.className = "square " + ((row+col)%2===0 ? "white":"black");
-
     sq.innerText = pieces[i];
 
     board.appendChild(sq);
   }
 }
 
-// check move
+// answer check
 function checkMove(move){
 
-  if(move==="e4"){
-    result.innerHTML="✅ सही move!";
+  if(move==="Qg7"){
+    result.innerHTML="✅ शानदार! यह checkmate है (GM move)";
   } else {
-    result.innerHTML="❌ गलत! सही: e4";
+    result.innerHTML="❌ गलत! सही move: Qg7#";
   }
-
 }
 
 </script>
