@@ -1,204 +1,97 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0f2027">
 <title>Toshit Chess Hub</title>
 
 <style>
-
 body {
   margin:0;
-  font-family:Arial, sans-serif;
+  font-family:Arial;
   color:#fff;
   text-align:center;
-
-  /* LIGHT CHESSBOARD BACKGROUND */
-  background:
-    linear-gradient(rgba(20,20,20,0.85), rgba(20,20,20,0.85)),
-    linear-gradient(45deg, #dcdcdc 25%, transparent 25%),
-    linear-gradient(-45deg, #dcdcdc 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #dcdcdc 75%),
-    linear-gradient(-45deg, transparent 75%, #dcdcdc 75%);
-  background-size:40px 40px;
-  background-position:0 0, 0 0, 0 20px, 20px -20px, -20px 0px;
+  background:#111;
 }
 
-/* TITLE */
 h2 {
-  font-size:28px;
-  margin:0;
-  padding:15px 10px;
-  font-weight:bold;
-
-  background: linear-gradient(90deg, #ffcc00, #ff9800);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size:26px;
+  padding:15px;
+  color:#ffcc00;
 }
 
-/* TITLE BAR */
-.title-bar {
-  height:4px;
-  width:100%;
-  background: linear-gradient(90deg, #ffcc00, #ff9800);
-  margin-bottom:10px;
-}
-
-/* BUTTON */
 button {
   width:90%;
   max-width:340px;
-  padding:18px;
-  margin:12px auto 6px;
-  font-size:20px;
+  padding:16px;
+  margin:10px auto;
+  font-size:18px;
   border:none;
-  border-radius:14px;
+  border-radius:10px;
   background:#1e88e5;
   color:#fff;
   display:block;
 }
 
-/* PRESS EFFECT */
-button:active {
-  transform:scale(0.96);
-  background:#1565c0;
-}
+.screen { display:none; }
+.active { display:block; }
 
-/* DESCRIPTION TEXT */
-.desc {
-  width:90%;
-  max-width:340px;
-  margin:0 auto 18px;
-  font-size:16px;
-  line-height:1.5;
-  color:#eee;
-}
-
-/* BACK BUTTON */
-.back {
-  background:#444;
-}
-
-/* SCREEN */
-.screen {
-  display:none;
-  padding:10px;
-}
-
-.active {
-  display:block;
-}
-
-/* HEADINGS */
-h3 {
-  margin-top:15px;
-  color:#ffd54f;
-}
-.start-btn {
-  background: linear-gradient(90deg, #00c853, #64dd17);
-  font-weight:bold;
-  font-size:22px;
-  margin-top:20px;
-}
 #trainerBoard {
-  background:#fff;
-}  
+  width:320px;
+  height:320px;
+  margin:20px auto;
+  display:grid;
+  grid-template-columns:repeat(8,1fr);
+}
+
+.square {
+  width:40px;
+  height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+}
+
+.white { background:#eee; color:#000; }
+.black { background:#555; }
 </style>
-<link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/www/css/chessboard.css">
-
-<script src="https://unpkg.com/chess.js@0.10.3/chess.min.js"></script>
-
-<script src="https://unpkg.com/chessboardjs@1.0.0/www/js/chessboard.js"></script>  
 </head>
+
 <body>
 
-<h2>♕♔ TOSHIT CHESS HUB ♘♖</h2>
-<div class="title-bar"></div>
+<h2>♔ ♕ ♙ TOSHIT CHESS HUB ♖ ♘ ♗</h2>
+
 <div id="home" class="screen active">
 
 <button onclick="go('play')">▶ Play Like GM</button>
-<div class="desc">
-Grandmaster की तरह खेलने के लिए सही प्लेटफॉर्म पर सीधे जाएं और practice करें
-</div>
-
-<button onclick="startTraining()">🧠 Daily Training</button>
-<div class="desc">
-रोजाना training routine: puzzles + game + analysis — जिससे खेल तेजी से improve होगा
-</div>
-  
-<button onclick="go('tools')">⚡ Quick Tools</button>
-<div class="desc">
-Quick tools से तुरंत खेलें, सीखें और अपनी गलतियों को समझें
-</div>
 
 <button onclick="go('trainer')">🎯 Guess Move Trainer</button>
-<div class="desc">
-Grandmaster की तरह सोचना सीखें — सही चाल पहचानें
+
 </div>
-  
-<button onclick="go('stats')">📊 My Progress</button>
-<div class="desc">
-अपनी daily progress देखें और improvement track करें
-</div>
-</div>
+
 <!-- PLAY -->
 <div id="play" class="screen">
-<h3>Select Grandmaster</h3>
+
+<h3>Select GM</h3>
 
 <button onclick="setPlayer('carlsen')">Carlsen</button>
 <button onclick="setPlayer('anand')">Anand</button>
 <button onclick="setPlayer('tal')">Tal</button>
-<button onclick="setPlayer('hikaru')">Hikaru</button>
-<button onclick="setPlayer('fischer')">Fischer</button>
-<button onclick="setPlayer('kasparov')">Kasparov</button>
-<button onclick="setPlayer('ding')">Ding</button>
-<button onclick="setPlayer('alireza')">Alireza</button>
-<button onclick="setPlayer('nepo')">Nepo</button>
-<button onclick="setPlayer('kramnik')">Kramnik</button>
-<h3>Select Time</h3>
 
-<button onclick="setTime('blitz')">Blitz</button>
-<button onclick="setTime('rapid')">Rapid</button>
-<button onclick="setTime('classical')">Classical</button>
+<button onclick="startGame()">🚀 START</button>
+<button onclick="go('home')">⬅ Back</button>
 
-<button class="start-btn" onclick="startGame()">🚀 START GAME</button>
-<button class="back" onclick="go('home')">⬅ Back</button>
 </div>
 
-<!-- TOOLS -->
-<div id="tools" class="screen">
-<h3>Quick Tools</h3>
-
-<button onclick="openGame()">▶ Play Game</button>
-<div class="desc">सीधे chess game खेलें</div>
-
-<button onclick="openPuzzle()">🧠 Solve Puzzle</button>
-<div class="desc">दिमाग तेज करने के लिए puzzles</div>
-
-<button onclick="openAnalysis()">📊 Analyze</button>
-<div class="desc">अपने game की गलतियां देखें</div>
-
-<button class="back" onclick="go('home')">⬅ Back</button>
-</div>
-
-<!-- STATS -->
-<div id="stats" class="screen">
-<h3>My Progress</h3>
-
-<p>Games: <span id="games">0</span></p>
-<p>Puzzles: <span id="puzzles">0</span></p>
-
-<button onclick="resetStats()">Reset</button>
-<button class="back" onclick="go('home')">⬅ Back</button>
-</div>
-
+<!-- TRAINER -->
 <div id="trainer" class="screen">
 
-<h3>🎯 Guess the Best Move</h3>
+<h3>Guess Best Move</h3>
 
-<div id="trainerBoard" style="width:320px; height:320px; margin:20px auto;"></div>
-<p>White to move — Best move क्या है?</p>
+<div id="trainerBoard"></div>
+
+<p>White to move</p>
 
 <button onclick="checkMove('e4')">e4</button>
 <button onclick="checkMove('d4')">d4</button>
@@ -206,156 +99,82 @@ Grandmaster की तरह सोचना सीखें — सही च�
 
 <p id="result"></p>
 
-<button class="back" onclick="go('home')">⬅ Back</button>
+<button onclick="go('home')">⬅ Back</button>
 
-</div>  
-  
+</div>
+
 <script>
 
-let player="", time="";
+let player="";
 
-// navigation
 function go(id){
-
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 
-  // 👉 CRITICAL FIX (delay बढ़ाया)
-  if(id === "trainer"){
-    setTimeout(loadTrainer, 500);
+  if(id==="trainer"){
+    loadBoard();
   }
 }
-// selections
+
 function setPlayer(p){
-  player = p;
-  alert("Selected: " + p);
+  player=p;
 }
 
-function setTime(t){
-  time=t;
-}
-
-// START GAME
 function startGame(){
 
-  if(player===""){
-    alert("Select Grandmaster");
-    return;
-  }
-
-  let url="";
-
-  // GM mapping (stable links only)
   if(player==="carlsen"){
-    url="https://lichess.org/";
+    window.location.href="https://lichess.org/";
   }
-
-  if(player==="anand"){
-    url="https://www.chess.com/play";
+  else if(player==="anand"){
+    window.location.href="https://www.chess.com/play";
   }
-
-  if(player==="tal"){
-    url="https://lichess.org/training";
+  else if(player==="tal"){
+    window.location.href="https://lichess.org/training";
   }
-
-  if(player==="hikaru"){
-    url="https://www.chess.com/play/online";
-  }
-
-  if(player==="fischer"){
-    url="https://lichess.org/";
-  }
-
-  if(player==="kasparov"){
-    url="https://www.chess.com/play";
-  }
-
-  if(player==="ding"){
-    url="https://lichess.org/";
-  }
-
-  if(player==="alireza"){
-    url="https://lichess.org/";
-  }
-
-  if(player==="nepo"){
-    url="https://www.chess.com/play";
-  }
-
-  if(player==="kramnik"){
-    url="https://lichess.org/";
-  }
-
-  // 👉 direct open (same tab)
-  window.location.href = url;
-}
-// TRAINING
-function startTraining(){
-
-  window.open("https://lichess.org/training","_blank");
-
-  setTimeout(()=>{
-    window.open("https://www.chess.com/play/computer","_blank");
-  },3000);
-
-  setTimeout(()=>{
-    window.open("https://lichess.org/analysis","_blank");
-  },6000);
 }
 
-// TOOLS
-function openGame(){
-  window.location.href="https://www.chess.com/play";
-}
+// ✅ NO LIBRARY BOARD (100% WORKING)
+function loadBoard(){
 
-function openPuzzle(){
-  window.location.href="https://lichess.org/training";
-}
+  let board = document.getElementById("trainerBoard");
+  board.innerHTML="";
 
-function openAnalysis(){
-  window.location.href="https://lichess.org/analysis";
-}
+  let pieces = [
+    "♜","♞","♝","♛","♚","♝","♞","♜",
+    "♟","♟","♟","♟","♟","♟","♟","♟",
+    "","","","","","","","",
+    "","","","","","","","",
+    "","","","","","","","",
+    "","","","","","","","",
+    "♙","♙","♙","♙","♙","♙","♙","♙",
+    "♖","♘","♗","♕","♔","♗","♘","♖"
+  ];
 
-// stats
-function loadStats(){
-  games.innerText=localStorage.getItem("games")||0;
-  puzzles.innerText=localStorage.getItem("puzzles")||0;
-}
+  for(let i=0;i<64;i++){
+    let sq = document.createElement("div");
 
-function resetStats(){
-  localStorage.clear();
-  loadStats();
-}
+    let row = Math.floor(i/8);
+    let col = i%8;
 
-loadStats();
+    sq.className = "square " + ((row+col)%2===0 ? "white":"black");
 
-function loadTrainer(){
+    sq.innerText = pieces[i];
 
-  if (trainerBoard) {
-    trainerBoard.destroy();
+    board.appendChild(sq);
   }
-
-  trainerGame = new Chess();
-
-  trainerBoard = Chessboard('trainerBoard', {
-    position: 'start',
-    draggable: false,
-    pieceTheme: 'https://unpkg.com/chessboardjs@1.0.0/www/img/chesspieces/wikipedia/{piece}.png'
-  });
-
 }
 
+// check move
 function checkMove(move){
 
-  let correct = "e4";
-
-  if(move === correct){
-    result.innerHTML = "✅ सही! यह center control करता है — GM move";
+  if(move==="e4"){
+    result.innerHTML="✅ सही move!";
   } else {
-    result.innerHTML = "❌ गलत! सही move: e4 (center control सबसे जरूरी)";
+    result.innerHTML="❌ गलत! सही: e4";
   }
 
-}  
+}
+
 </script>
 
 </body>
