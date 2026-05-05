@@ -6,6 +6,8 @@
 <meta name="theme-color" content="#0f2027">
 <title>Toshit Chess Hub</title>
 
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111111">  
 <style>
 
 body {
@@ -217,8 +219,6 @@ Quick tools से तुरंत खेलें, सीखें और अ�
 <button onclick="resetStats()">Reset</button>
 <button class="back" onclick="go('home')">⬅ Back</button>
 </div>
-
-</div>  
   
 <script>
 
@@ -385,6 +385,17 @@ window.onload = function(){
 function openRajasthan(){
   window.open("https://chess-results.com/fed.aspx?lan=1&fed=IND&bdld1=22", "_blank");
 }
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js')
+      .then(function(registration) {
+        console.log('SW registered:', registration);
+      })
+      .catch(function(error) {
+        console.log('SW failed:', error);
+      });
+  });
+}  
 </script>
 
 </body>
