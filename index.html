@@ -138,8 +138,8 @@ Quick tools से तुरंत खेलें, सीखें और अ�
 <div class="desc">
 अपनी daily progress देखें और improvement track करें
 </div>
-<button onclick="openProfile()">👤 My Chess Profile</button>
-<div class="desc">अपना Chess.com प्रोफाइल देखें
+<button onclick="openRajasthan()">🏆 Rajasthan Chess Results</button>
+<div class="desc">राजस्थान के tournaments और results देखें
 </div>
 </div>
 <!-- PLAY -->
@@ -382,24 +382,8 @@ window.onload = function(){
     go("review");
   }
 };
-function changeProfile(){
-  localStorage.removeItem("chessUser");
-  openProfile();
-}
-  
-function openProfile(){
-
-  let username = localStorage.getItem("chessUser");
-
-  if(!username){
-    username = prompt("Enter your Chess.com username:");
-
-    if(!username) return;
-
-    localStorage.setItem("chessUser", username);
-  }
-
-  window.open("https://www.chess.com/member/" + username, "_blank");
+function openRajasthan(){
+  window.open("https://chess-results.com/fed.aspx?lan=1&fed=IND&bdld1=22", "_blank");
 }
 </script>
 
