@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">  
 <meta name="theme-color" content="#0f2027">
 <title>Toshit Chess Hub</title>
 
@@ -298,6 +299,7 @@ function startGame(){
   }
 
   // 👉 direct open (same tab)
+  localStorage.setItem("needReview", "yes");
   window.location.href = url;
 }
 // TRAINING
@@ -360,6 +362,9 @@ function finishReview(){
   localStorage.removeItem("needReview");
 
   loadStats();
+
+  reviewData = {1:false,2:false,3:false}; // ✅ ADD HERE
+
   go("home");
 }
   
