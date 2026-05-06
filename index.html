@@ -248,8 +248,8 @@ function setTime(t){
 }
 
 // START GAME
+// START GAME
 function startGame(){
-
   if(player===""){
     alert("Select Grandmaster");
     return;
@@ -257,49 +257,32 @@ function startGame(){
 
   let url="";
 
-  // GM mapping (stable links only)
-  if(player==="carlsen"){
-    url="https://lichess.org/";
-  }
+  // GM mapping (direct links)
+  switch(player){
+    case "carlsen":
+    case "fischer":
+    case "ding":
+    case "alireza":
+    case "kramnik":
+      url="https://lichess.org/";
+      break;
 
-  if(player==="anand"){
-    url="https://www.chess.com/play";
-  }
+    case "anand":
+    case "kasparov":
+    case "nepo":
+      url="https://www.chess.com/play";
+      break;
 
-  if(player==="tal"){
-    url="https://lichess.org/training";
-  }
+    case "tal":
+      url="https://lichess.org/training";
+      break;
 
-  if(player==="hikaru"){
-    url="https://www.chess.com/play/online";
-  }
-
-  if(player==="fischer"){
-    url="https://lichess.org/";
-  }
-
-  if(player==="kasparov"){
-    url="https://www.chess.com/play";
-  }
-
-  if(player==="ding"){
-    url="https://lichess.org/";
-  }
-
-  if(player==="alireza"){
-    url="https://lichess.org/";
-  }
-
-  if(player==="nepo"){
-    url="https://www.chess.com/play";
-  }
-
-  if(player==="kramnik"){
-    url="https://lichess.org/";
+    case "hikaru":
+      url="https://www.chess.com/play/online";
+      break;
   }
 
   // 👉 direct open (same tab)
-  localStorage.setItem("needReview", "yes");
   window.location.href = url;
 }
 // TRAINING
