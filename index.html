@@ -248,7 +248,6 @@ function setTime(t){
 }
 
 // START GAME
-// START GAME
 function startGame(){
   if(player===""){
     alert("Select Grandmaster");
@@ -257,32 +256,26 @@ function startGame(){
 
   let url="";
 
-  // GM mapping (direct links)
   switch(player){
     case "carlsen":
     case "fischer":
+    case "tal":
     case "ding":
     case "alireza":
     case "kramnik":
-      url="https://lichess.org/";
+      // Lichess direct board
+      url="https://lichess.org/?any";
       break;
 
     case "anand":
     case "kasparov":
-    case "nepo":
-      url="https://www.chess.com/play";
-      break;
-
-    case "tal":
-      url="https://lichess.org/training";
-      break;
-
     case "hikaru":
+    case "nepo":
+      // Chess.com direct board
       url="https://www.chess.com/play/online";
       break;
   }
 
-  // 👉 direct open (same tab)
   window.location.href = url;
 }
 // TRAINING
