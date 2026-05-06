@@ -68,6 +68,12 @@ button {
   width:320px;
   margin:20px auto;
 }
+#board {
+  width:320px;
+  height:320px;
+  margin:20px auto;
+  background:#fff;
+}  
 </style>
 </head>
 
@@ -135,15 +141,18 @@ function startGame(){
 
   document.getElementById("gmName").innerText = "Playing vs " + player.toUpperCase();
 
-  game = new Chess();
+  setTimeout(()=>{
 
-  board = Chessboard('board', {
-    position: 'start',
-    draggable: true,
-    onDrop: onDrop
-  });
+    game = new Chess();
+
+    board = Chessboard('board', {
+      position: 'start',
+      draggable: true,
+      pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png'
+    });
+
+  }, 300);
 }
-
 // PLAYER MOVE
 function onDrop(source, target){
 
