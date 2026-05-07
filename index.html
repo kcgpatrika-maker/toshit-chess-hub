@@ -65,9 +65,10 @@ function startGame(){
 
   game = new Chess();
 
-  board = Chessboard('board', {
-    position: 'start',
-    draggable: true,
+board = Chessboard('board', {
+  position: 'start',
+  orientation: 'black',
+  draggable: true,
     pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
     onDrop: onDrop
   });
