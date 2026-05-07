@@ -5,11 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Toshit Chess Hub - Play Like GM</title>
 
-<!-- Chessboard + Chess.js + Stockfish -->
+<!-- Chessboard + Chess.js -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.13.4/chess.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/stockfish/stockfish.js"></script>
 
 <style>
 body { margin:0; font-family:Arial; text-align:center; background:#222; color:#fff; }
@@ -29,14 +28,13 @@ button:active { transform:scale(0.96); background:#1565c0; }
 </div>
 
 <script>
-// केवल Anand का प्रोफ़ाइल
+let game, board;
+
+// Anand का प्रोफ़ाइल (पहली चाल)
 const gmProfile = {
   name: "Viswanathan Anand",
-  openings: ["e4","c4","Nf3"],
-  style: "solid positional"
+  openings: ["e4","c4","Nf3"]
 };
-
-let game, board, engine;
 
 // Start Game
 function startGame(){
@@ -46,8 +44,6 @@ function startGame(){
     position:'start',
     onDrop: onDrop
   });
-
-  engine = Stockfish();
 
   // Anand की पहली चाल
   let move = gmProfile.openings[Math.floor(Math.random()*gmProfile.openings.length)];
@@ -62,27 +58,18 @@ function onDrop(source, target){
 
   board.position(game.fen());
 
-  // Opponent move via Stockfish
-  setTimeout(()=>engineMove(),1000);
+  // Opponent की अगली चाल (अभी simple random move)
+  setTimeout(()=>opponentMove(),1000);
 }
 
-// Opponent move
-function engineMove(){
-  engine.postMessage('uci');
-  engine.postMessage('isready');
-  engine.postMessage('ucinewgame');
-  engine.postMessage('position fen '+game.fen());
-  engine.postMessage('go depth 10');
-
-  engine.onmessage = function(line){
-    if(line.includes('bestmove')){
-      let parts=line.split(' ');
-      if(parts[1]){
-        game.move(parts[1],{sloppy:true});
-        board.position(game.fen());
-      }
-    }
-  };
+// Opponent move (simple random for demo)
+function opponentMove(){
+  let moves = game.moves();
+  if(moves.length>0){
+    let move = moves[Math.floor(Math.random()*moves.length)];
+    game.move(move);
+    board.position(game.fen());
+  }
 }
 </script>
 
