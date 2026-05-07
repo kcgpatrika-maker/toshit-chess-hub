@@ -41,11 +41,13 @@ function startGame(){
   game = new Chess();
 
   // बोर्ड initialize (सही तरीका: new Chessboard)
-  board = new Chessboard('trainerBoard', {
-    draggable:true,
-    position:'start',
-    onDrop: onDrop
-  });
+board = Chessboard('trainerBoard', {
+  draggable:true,
+  position:'start',
+  onDrop: onDrop
+});
+board.position('start');   // बोर्ड को तुरंत दिखाने के लिए
+
 
   // Anand की पहली चाल
   let move = gmProfile.openings[Math.floor(Math.random()*gmProfile.openings.length)];
