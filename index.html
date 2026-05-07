@@ -7,9 +7,12 @@
 
 <!-- Chessboard + Chess.js -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.13.4/chess.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.13.4/chess.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
 <style>
 body { margin:0; font-family:Arial; text-align:center; background:#222; color:#fff; }
 h2 { font-size:26px; padding:10px; color:#ffcc00; }
@@ -41,7 +44,7 @@ function startGame(){
   game = new Chess();
 
   // बोर्ड initialize (सही तरीका)
-  board = new Chessboard('trainerBoard', {
+  board = Chessboard('trainerBoard', {
     draggable:true,
     position:'start',
     onDrop: onDrop
