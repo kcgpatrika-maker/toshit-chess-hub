@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Toshit Chess Hub</title>
+<title>Toshit Chess Hub - Play Like GM</title>
 
 <!-- Chessboard + Chess.js + Stockfish -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css"/>
@@ -16,88 +16,30 @@ body { margin:0; font-family:Arial; text-align:center; background:#222; color:#f
 h2 { font-size:26px; padding:10px; color:#ffcc00; }
 button { width:90%; max-width:340px; padding:14px; margin:10px auto; font-size:18px; border:none; border-radius:10px; background:#1e88e5; color:#fff; display:block; }
 button:active { transform:scale(0.96); background:#1565c0; }
-.screen { display:none; padding:10px; }
-.active { display:block; }
-.start-btn { background: linear-gradient(90deg, #00c853, #64dd17); font-weight:bold; }
-.back { background:#444; }
 #trainerBoard { margin:20px auto; }
 </style>
 </head>
 <body>
 
-<h2>♕♔ TOSHIT CHESS HUB ♘♖</h2>
+<h2>♕ Play Like GM - Anand ♔</h2>
 
-<div id="home" class="screen active">
-  <button onclick="go('play')">▶ Play Like GM</button>
-  <button onclick="go('tools')">⚡ Quick Tools</button>
-  <button onclick="go('stats')">📊 My Progress</button>
-</div>
-
-<!-- PLAY -->
-<div id="play" class="screen">
-  <h3>Select Grandmaster</h3>
-  <button onclick="setPlayer('carlsen')">Carlsen</button>
-  <button onclick="setPlayer('anand')">Anand</button>
-  <button onclick="setPlayer('tal')">Tal</button>
-  <button onclick="setPlayer('kasparov')">Kasparov</button>
-  <button onclick="setPlayer('fischer')">Fischer</button>
-
-  <button class="start-btn" onclick="startGame()">🚀 START GAME</button>
-  <button class="back" onclick="go('home')">⬅ Back</button>
-
+<div id="play">
+  <button onclick="startGame()">🚀 START GAME vs Anand</button>
   <div id="trainerBoard" style="width:350px;"></div>
-  <div id="chessWatch">
-    <p>Player Time: <span id="playerTime">300</span>s</p>
-    <p>Opponent Time: <span id="oppTime">300</span>s</p>
-    <button onclick="pushClock()">Push</button>
-  </div>
-</div>
-
-<!-- TOOLS -->
-<div id="tools" class="screen">
-  <h3>Quick Tools</h3>
-  <button onclick="openGame()">▶ Play Game</button>
-  <button onclick="openPuzzle()">🧠 Solve Puzzle</button>
-  <button onclick="openAnalysis()">📊 Analyze</button>
-  <button class="back" onclick="go('home')">⬅ Back</button>
-</div>
-
-<!-- STATS -->
-<div id="stats" class="screen">
-  <h3>My Progress</h3>
-  <p>Games: <span id="games">0</span></p>
-  <p>Puzzles: <span id="puzzles">0</span></p>
-  <button onclick="resetStats()">Reset</button>
-  <button class="back" onclick="go('home')">⬅ Back</button>
 </div>
 
 <script>
-// GM Profiles
-const gmProfiles = {
-  carlsen: {openings:["e4","d4","Nf3"], style:"flexible"},
-  anand: {openings:["e4","c4","Nf3"], style:"solid"},
-  tal: {openings:["e4","d4"], style:"attacking"},
-  kasparov: {openings:["e4","d4","c4"], style:"dynamic"},
-  fischer: {openings:["e4","c4"], style:"classical"}
+// केवल Anand का प्रोफ़ाइल
+const gmProfile = {
+  name: "Viswanathan Anand",
+  openings: ["e4","c4","Nf3"],
+  style: "solid positional"
 };
 
-let player="", game, board, engine;
-let playerTimer=300, oppTimer=300;
-let playerTurn=true, timerInterval;
-
-// Navigation
-function go(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-
-// GM select
-function setPlayer(p){ player=p; alert("Selected: "+p); }
+let game, board, engine;
 
 // Start Game
 function startGame(){
-  if(player===""){ alert("Select Grandmaster"); return; }
-
   game = new Chess();
   board = Chessboard('trainerBoard', {
     draggable:true,
@@ -107,16 +49,10 @@ function startGame(){
 
   engine = Stockfish();
 
-  // Opponent first move from GM profile
-  let gm = gmProfiles[player];
-  if(gm && gm.openings.length>0){
-    let move = gm.openings[Math.floor(Math.random()*gm.openings.length)];
-    game.move(move);
-    board.position(game.fen());
-    playerTurn=true;
-  }
-
-  startClock();
+  // Anand की पहली चाल
+  let move = gmProfile.openings[Math.floor(Math.random()*gmProfile.openings.length)];
+  game.move(move);
+  board.position(game.fen());
 }
 
 // Handle player move
@@ -125,54 +61,29 @@ function onDrop(source, target){
   if(move===null) return 'snapback';
 
   board.position(game.fen());
-  playerTurn=false;
+
+  // Opponent move via Stockfish
   setTimeout(()=>engineMove(),1000);
 }
 
 // Opponent move
 function engineMove(){
+  engine.postMessage('uci');
+  engine.postMessage('isready');
+  engine.postMessage('ucinewgame');
   engine.postMessage('position fen '+game.fen());
   engine.postMessage('go depth 10');
+
   engine.onmessage = function(line){
     if(line.includes('bestmove')){
       let parts=line.split(' ');
       if(parts[1]){
         game.move(parts[1],{sloppy:true});
         board.position(game.fen());
-        playerTurn=true;
       }
     }
   };
 }
-
-// Chess Watch
-function startClock(){
-  clearInterval(timerInterval);
-  timerInterval=setInterval(()=>{
-    if(playerTurn){
-      playerTimer--; document.getElementById('playerTime').innerText=playerTimer;
-    } else {
-      oppTimer--; document.getElementById('oppTime').innerText=oppTimer;
-    }
-  },1000);
-}
-function pushClock(){ playerTurn=false; }
-
-// Tools
-function openGame(){ window.location.href="https://www.chess.com/play"; }
-function openPuzzle(){ window.location.href="https://lichess.org/training"; }
-function openAnalysis(){ window.location.href="https://lichess.org/analysis"; }
-
-// Stats
-function loadStats(){
-  games.innerText=localStorage.getItem("games")||0;
-  puzzles.innerText=localStorage.getItem("puzzles")||0;
-}
-function resetStats(){
-  localStorage.clear();
-  loadStats();
-}
-window.onload = loadStats;
 </script>
 
 </body>
