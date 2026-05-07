@@ -94,6 +94,7 @@ function onDrop(source, target){
   setTimeout(aiMove,500);
 }
 // Anand opening memory
+// Anand opening memory
 let anandLine = [
   "e5",
   "Nc6",
@@ -105,51 +106,75 @@ let anandLine = [
 
 let moveIndex = 0;
 
-// AI Move
+// Better AI Move
 function aiMove(){
 
-  // पहले Anand opening line चलेगी
+  // पहले opening line
   if(moveIndex < anandLine.length){
 
     let move = anandLine[moveIndex];
 
     let result = game.move(move);
 
-    // अगर illegal हो जाए तो random move
-    if(result === null){
+    if(result !== null){
 
-      let moves = game.moves();
+      moveIndex++;
 
-      if(moves.length === 0){
-        return;
-      }
+      board.position(game.fen());
 
-      move = moves[Math.floor(Math.random()*moves.length)];
-
-      game.move(move);
+      return;
     }
-
-    moveIndex++;
-
-    board.position(game.fen());
-
-    return;
   }
 
-  // बाद में random moves
-  let moves = game.moves();
+  // सभी legal moves
+  let moves = game.moves({verbose:true});
 
   if(moves.length === 0){
     return;
   }
 
-  let randomMove = moves[Math.floor(Math.random()*moves.length)];
+  // सबसे पहले capture ढूंढो
+  let captureMoves = moves.filter(m => m.flags.includes('c'));
 
-  game.move(randomMove);
+  let selectedMove;
+
+  // अगर capture available है
+  if(captureMoves.length > 0){
+
+    // सबसे valuable capture चुनो
+    let pieceValue = {
+      p:1,
+      n:3,
+      b:3,
+      r:5,
+      q:9,
+      k:100
+    };
+
+    captureMoves.sort((a,b)=>{
+      return pieceValue[b.captured] - pieceValue[a.captured];
+    });
+
+    selectedMove = captureMoves[0];
+
+  } else {
+
+    // center control preference
+    let centerMoves = moves.filter(m =>
+      ['d4','e4','d5','e5'].includes(m.to)
+    );
+
+    if(centerMoves.length > 0){
+      selectedMove = centerMoves[Math.floor(Math.random()*centerMoves.length)];
+    } else {
+      selectedMove = moves[Math.floor(Math.random()*moves.length)];
+    }
+  }
+
+  game.move(selectedMove);
 
   board.position(game.fen());
 }
-
 </script>
 
 </body>
