@@ -1,82 +1,115 @@
+```html
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Toshit Chess Hub - Play Like GM</title>
+<title>Toshit Chess Hub</title>
 
-<!-- Chessboard + Chess.js -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css">
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.13.4/chess.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
+
 <style>
-body { margin:0; font-family:Arial; text-align:center; background:#222; color:#fff; }
-h2 { font-size:26px; padding:10px; color:#ffcc00; }
-button { width:90%; max-width:340px; padding:14px; margin:10px auto; font-size:18px; border:none; border-radius:10px; background:#1e88e5; color:#fff; display:block; }
-button:active { transform:scale(0.96); background:#1565c0; }
-#trainerBoard { margin:20px auto; }
+body{
+  margin:0;
+  background:#222;
+  color:white;
+  text-align:center;
+  font-family:Arial;
+}
+
+h2{
+  color:#ffcc00;
+  margin-top:20px;
+}
+
+button{
+  width:90%;
+  max-width:320px;
+  padding:15px;
+  margin:15px auto;
+  border:none;
+  border-radius:10px;
+  background:#1e88e5;
+  color:white;
+  font-size:18px;
+  display:block;
+}
+
+#board{
+  width:320px;
+  margin:20px auto;
+}
 </style>
 </head>
+
 <body>
 
 <h2>♕ Play Like GM - Anand ♔</h2>
 
-<div id="play">
-  <button onclick="startGame()">🚀 START GAME vs Anand</button>
-  <div id="trainerBoard" style="width:350px;"></div>
-</div>
+<button onclick="startGame()">🚀 START GAME</button>
+
+<div id="board"></div>
 
 <script>
-let game, board;
 
-// Anand का प्रोफ़ाइल
-const gmProfile = {
-  name: "Viswanathan Anand",
-  openings: ["e4","c4","Nf3"]
-};
+let game;
+let board;
 
-// Start Game
 function startGame(){
+
   game = new Chess();
 
-  // बोर्ड initialize (सही तरीका)
-  board = Chessboard('trainerBoard', {
-    draggable:true,
-    position:'start',
+  board = Chessboard('board', {
+    position: 'start',
+    draggable: true,
+    pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
     onDrop: onDrop
   });
 
-  // Anand की पहली चाल
-  let move = gmProfile.openings[Math.floor(Math.random()*gmProfile.openings.length)];
-  game.move(move);
-  board.position(game.fen());   // पहली चाल दिखाने के लिए
+  setTimeout(function(){
+    game.move('e4');
+    board.position(game.fen());
+  },500);
 }
 
-// Handle player move
 function onDrop(source, target){
-  let move = game.move({from:source, to:target, promotion:'q'});
-  if(move===null) return 'snapback';
+
+  let move = game.move({
+    from: source,
+    to: target,
+    promotion: 'q'
+  });
+
+  if(move === null){
+    return 'snapback';
+  }
 
   board.position(game.fen());
 
-  // Opponent की अगली चाल (simple random demo)
-  setTimeout(()=>opponentMove(),1000);
+  setTimeout(aiMove,500);
 }
 
-// Opponent move (simple random for demo)
-function opponentMove(){
+function aiMove(){
+
   let moves = game.moves();
-  if(moves.length>0){
-    let move = moves[Math.floor(Math.random()*moves.length)];
-    game.move(move);
-    board.position(game.fen());
+
+  if(moves.length === 0){
+    return;
   }
+
+  let randomMove = moves[Math.floor(Math.random()*moves.length)];
+
+  game.move(randomMove);
+
+  board.position(game.fen());
 }
+
 </script>
 
 </body>
 </html>
+```
