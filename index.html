@@ -1,38 +1,180 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">  
+<meta name="theme-color" content="#0f2027">
 <title>Toshit Chess Hub</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111111">
 
 <!-- Chessboard + Chess.js + Stockfish -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.13.4/chess.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/stockfish/stockfish.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stockfish/stockfish.js"></script>  
+<style>
+
+body {
+  margin:0;
+  font-family:Arial, sans-serif;
+  color:#fff;
+  text-align:center;
+
+  /* LIGHT CHESSBOARD BACKGROUND */
+  background:
+    linear-gradient(rgba(20,20,20,0.85), rgba(20,20,20,0.85)),
+    linear-gradient(45deg, #dcdcdc 25%, transparent 25%),
+    linear-gradient(-45deg, #dcdcdc 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #dcdcdc 75%),
+    linear-gradient(-45deg, transparent 75%, #dcdcdc 75%);
+  background-size:40px 40px;
+  background-position:0 0, 0 0, 0 20px, 20px -20px, -20px 0px;
+}
+
+/* TITLE */
+h2 {
+  font-size:28px;
+  margin:0;
+  padding:15px 10px;
+  font-weight:bold;
+
+  background: linear-gradient(90deg, #ffcc00, #ff9800);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* TITLE BAR */
+.title-bar {
+  height:4px;
+  width:100%;
+  background: linear-gradient(90deg, #ffcc00, #ff9800);
+  margin-bottom:10px;
+}
+
+/* BUTTON */
+button {
+  width:90%;
+  max-width:340px;
+  padding:18px;
+  margin:12px auto 6px;
+  font-size:20px;
+  border:none;
+  border-radius:14px;
+  background:#1e88e5;
+  color:#fff;
+  display:block;
+}
+
+/* PRESS EFFECT */
+button:active {
+  transform:scale(0.96);
+  background:#1565c0;
+}
+
+/* DESCRIPTION TEXT */
+.desc {
+  width:90%;
+  max-width:340px;
+  margin:0 auto 18px;
+  font-size:16px;
+  line-height:1.5;
+  color:#eee;
+}
+
+/* BACK BUTTON */
+.back {
+  background:#444;
+}
+
+/* SCREEN */
+.screen {
+  display:none;
+  padding:10px;
+}
+
+.active {
+  display:block;
+}
+
+/* HEADINGS */
+h3 {
+  margin-top:15px;
+  color:#ffd54f;
+}
+.start-btn {
+  background: linear-gradient(90deg, #00c853, #64dd17);
+  font-weight:bold;
+  font-size:22px;
+  margin-top:20px;
+}
+#trainerBoard {
+  background:#fff;
+}
+/* review buttons */
+.opt {
+  background:#333;
+}
+.opt.selected {
+  background:#00c853;
+}  
+</style>
 </head>
 <body>
 
 <h2>♕♔ TOSHIT CHESS HUB ♘♖</h2>
-
+<div class="title-bar"></div>
 <div id="home" class="screen active">
-  <button onclick="go('play')">▶ Play Like GM</button>
+
+<button onclick="go('play')">▶ Play Like GM</button>
+<div class="desc">
+Grandmaster की तरह खेलने के लिए सही प्लेटफॉर्म पर सीधे जाएं और practice करें
 </div>
 
-<!-- PLAY SCREEN -->
+<button onclick="startTraining()">🧠 Daily Training</button>
+<div class="desc">
+रोजाना training routine: puzzles + game + analysis — जिससे खेल तेजी से improve होगा
+</div>
+  
+<button onclick="go('tools')">⚡ Quick Tools</button>
+<div class="desc">
+Quick tools से तुरंत खेलें, सीखें और अपनी गलतियों को समझें
+</div>
+
+<button onclick="go('stats')">📊 My Progress</button>
+<div class="desc">
+अपनी daily progress देखें और improvement track करें
+</div>
+<button onclick="openRajasthan()">🏆 Rajasthan Chess Results</button>
+<div class="desc">राजस्थान के tournaments और results देखें
+</div>
+</div>
+<!-- PLAY -->
 <div id="play" class="screen">
-  <h3>Select Grandmaster</h3>
-  <button onclick="setPlayer('carlsen')">Carlsen</button>
-  <button onclick="setPlayer('anand')">Anand</button>
-  <button onclick="setPlayer('tal')">Tal</button>
-  <button onclick="setPlayer('kasparov')">Kasparov</button>
-  <button onclick="setPlayer('fischer')">Fischer</button>
+<h3>Select Grandmaster</h3>
 
-  <button class="start-btn" onclick="startGame()">🚀 START GAME</button>
-  <button class="back" onclick="go('home')">⬅ Back</button>
+<button onclick="setPlayer('carlsen')">Carlsen</button>
+<button onclick="setPlayer('anand')">Anand</button>
+<button onclick="setPlayer('tal')">Tal</button>
+<button onclick="setPlayer('hikaru')">Hikaru</button>
+<button onclick="setPlayer('fischer')">Fischer</button>
+<button onclick="setPlayer('kasparov')">Kasparov</button>
+<button onclick="setPlayer('ding')">Ding</button>
+<button onclick="setPlayer('alireza')">Alireza</button>
+<button onclick="setPlayer('nepo')">Nepo</button>
+<button onclick="setPlayer('kramnik')">Kramnik</button>
+<h3>Select Time</h3>
 
-  <!-- बोर्ड और वॉच -->
-  <div id="trainerBoard" style="width:350px; margin:20px auto;"></div>
+<button onclick="setTime('blitz')">Blitz</button>
+<button onclick="setTime('rapid')">Rapid</button>
+<button onclick="setTime('classical')">Classical</button>
+
+<button class="start-btn" onclick="startGame()">🚀 START GAME</button>
+<button class="back" onclick="go('home')">⬅ Back</button>
+
+  <div id="trainerBoard" style="width:350px;"></div>
   <div id="chessWatch">
     <p>Player Time: <span id="playerTime">300</span>s</p>
     <p>Opponent Time: <span id="oppTime">300</span>s</p>
@@ -40,7 +182,60 @@
   </div>
 </div>
 
+<!-- TOOLS -->
+<div id="tools" class="screen">
+<h3>Quick Tools</h3>
+
+<button onclick="openGame()">▶ Play Game</button>
+<div class="desc">सीधे chess game खेलें</div>
+
+<button onclick="openPuzzle()">🧠 Solve Puzzle</button>
+<div class="desc">दिमाग तेज करने के लिए puzzles</div>
+
+<button onclick="openAnalysis()">📊 Analyze</button>
+<div class="desc">अपने game की गलतियां देखें</div>
+
+<button class="back" onclick="go('home')">⬅ Back</button>
+</div>
+<!-- REVIEW -->
+<div id="review" class="screen">
+
+<h3>📊 Game Review (2 min)</h3>
+
+<p>❌ Biggest Mistake?</p>
+<button class="opt" onclick="selectOpt(1,this)">Blunder</button>
+<button class="opt" onclick="selectOpt(1,this)">Time Pressure</button>
+<button class="opt" onclick="selectOpt(1,this)">Opening Mistake</button>
+
+<p>⚠️ Missed Opportunity?</p>
+<button class="opt" onclick="selectOpt(2,this)">Mate Miss</button>
+<button class="opt" onclick="selectOpt(2,this)">Capture Miss</button>
+<button class="opt" onclick="selectOpt(2,this)">Better Move</button>
+
+<p>✔ Best Part?</p>
+<button class="opt" onclick="selectOpt(3,this)">Good Attack</button>
+<button class="opt" onclick="selectOpt(3,this)">Solid Defense</button>
+<button class="opt" onclick="selectOpt(3,this)">Lucky Win</button>
+
+<button onclick="openAnalysis()">🔍 Analyze Game</button>
+
+<button id="finishBtn" class="start-btn" disabled onclick="finishReview()">Finish Review</button>
+
+</div>
+
+<!-- STATS -->
+<div id="stats" class="screen">
+<h3>My Progress</h3>
+
+<p>Games: <span id="games">0</span></p>
+<p>Puzzles: <span id="puzzles">0</span></p>
+
+<button onclick="resetStats()">Reset</button>
+<button class="back" onclick="go('home')">⬅ Back</button>
+</div>
+  
 <script>
+
 // GM Profiles
 const gmProfiles = {
   carlsen: {openings:["e4","d4","Nf3"], style:"flexible"},
@@ -54,27 +249,37 @@ let player="", game, board, engine;
 let playerTimer=300, oppTimer=300;
 let playerTurn=true, timerInterval;
 
-// Navigation
+// navigation
 function go(id){
+
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
+// selections
+function setPlayer(p){
+  player = p;
+  alert("Selected: " + p);
+}
 
-// GM select
-function setPlayer(p){ player=p; alert("Selected: "+p); }
+function setTime(t){
+  time=t;
+}
 
-// Start Game
+// START GAME
 function startGame(){
-  if(player===""){ alert("Select Grandmaster"); return; }
 
-  game = new Chess();
+  if(player===""){
+    alert("Select Grandmaster");
+    return;
+  }
+
+    game = new Chess();
   board = Chessboard('trainerBoard', {
     draggable:true,
     position:'start',
     onDrop: onDrop
   });
 
-  // Stockfish engine
   engine = Stockfish();
 
   // Opponent first move from GM profile
@@ -96,8 +301,6 @@ function onDrop(source, target){
 
   board.position(game.fen());
   playerTurn=false;
-
-  // Opponent move via Stockfish
   setTimeout(()=>engineMove(),1000);
 }
 
@@ -126,6 +329,106 @@ function startClock(){
   },1000);
 }
 function pushClock(){ playerTurn=false; }
+
+  // TRAINING
+function startTraining(){
+
+  window.open("https://lichess.org/training","_blank");
+
+  setTimeout(()=>{
+    window.open("https://www.chess.com/play/computer","_blank");
+  },3000);
+
+  setTimeout(()=>{
+    window.open("https://lichess.org/analysis","_blank");
+  },6000);
+}
+
+// TOOLS
+function openGame(){
+  window.location.href="https://www.chess.com/play";
+}
+
+function openPuzzle(){
+  window.location.href="https://lichess.org/training";
+}
+
+function openAnalysis(){
+  window.location.href="https://lichess.org/analysis";
+}
+// REVIEW OPTIONS
+function selectOpt(group, el){
+
+  document.querySelectorAll(".opt").forEach(b=>{
+    if(b.parentElement === el.parentElement){
+      b.classList.remove("selected");
+    }
+  });
+
+  el.classList.add("selected");
+  reviewData[group]=true;
+
+  checkFinish();
+}
+
+// ENABLE FINISH
+function checkFinish(){
+  if(reviewData[1] && reviewData[2] && reviewData[3]){
+    document.getElementById("finishBtn").disabled=false;
+  }
+}
+
+// FINISH REVIEW
+function finishReview(){
+
+  let g = parseInt(localStorage.getItem("games")||0);
+  let r = parseInt(localStorage.getItem("reviews")||0);
+
+  localStorage.setItem("games", g+1);
+  localStorage.setItem("reviews", r+1);
+
+  localStorage.removeItem("needReview");
+
+  loadStats();
+
+  reviewData = {1:false,2:false,3:false}; // ✅ ADD HERE
+
+  go("home");
+}
+  
+// stats
+function loadStats(){
+  games.innerText=localStorage.getItem("games")||0;
+  puzzles.innerText=localStorage.getItem("puzzles")||0;
+}
+
+function resetStats(){
+  localStorage.clear();
+  loadStats();
+}
+// AUTO REVIEW TRIGGER
+window.onload = function(){
+
+  loadStats();
+
+  if(localStorage.getItem("needReview") === "yes"){
+    go("review");
+  }
+};
+function openRajasthan(){
+  window.open("https://chess-results.com/fed.aspx?lan=1&fed=IND&bdld1=22", "_blank");
+}
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js')
+      .then(function(registration) {
+        console.log('SW registered:', registration);
+      })
+      .catch(function(error) {
+        console.log('SW failed:', error);
+      });
+  });
+}  
 </script>
 
 </body>
