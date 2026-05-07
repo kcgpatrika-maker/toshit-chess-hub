@@ -93,8 +93,50 @@ function onDrop(source, target){
   setTimeout(aiMove,500);
 }
 
+// Anand opening memory
+let anandLine = [
+  "e5",
+  "Nc6",
+  "a6",
+  "Nf6",
+  "Be7",
+  "O-O"
+];
+
+let moveIndex = 0;
+
+// AI Move
 function aiMove(){
 
+  // पहले Anand opening line चलेगी
+  if(moveIndex < anandLine.length){
+
+    let move = anandLine[moveIndex];
+
+    let result = game.move(move);
+
+    // अगर illegal हो जाए तो random move
+    if(result === null){
+
+      let moves = game.moves();
+
+      if(moves.length === 0){
+        return;
+      }
+
+      move = moves[Math.floor(Math.random()*moves.length)];
+
+      game.move(move);
+    }
+
+    moveIndex++;
+
+    board.position(game.fen());
+
+    return;
+  }
+
+  // बाद में random moves
   let moves = game.moves();
 
   if(moves.length === 0){
