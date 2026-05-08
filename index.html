@@ -116,7 +116,7 @@ function aiMove(){
 
   engine.postMessage("position fen " + game.fen());
 
-  engine.postMessage("go depth 10");
+  engine.postMessage("go movetime 1200");
 
   engine.onmessage = function(event){
 
