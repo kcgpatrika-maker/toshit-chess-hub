@@ -59,7 +59,7 @@ button{
 
 let game;
 let board;
-let engine;
+let engine = new Worker("stockfish.js");
   
 function startGame(){
 
@@ -108,23 +108,32 @@ let moveIndex = 0;
 // Better AI Move
 function aiMove(){
 
-  // पहले Anand opening line
-  if(moveIndex < anandLine.length){
+  engine.postMessage("position fen " + game.fen());
 
-    let move = anandLine[moveIndex];
+  engine.postMessage("go depth 10");
 
-    let result = game.move(move);
+  engine.onmessage = function(event){
 
-    if(result !== null){
+    let line = event.data;
 
-      moveIndex++;
+    if(line.startsWith("bestmove")){
+
+      let move = line.split(" ")[1];
+
+      if(move === "(none)"){
+        return;
+      }
+
+      game.move({
+        from: move.substring(0,2),
+        to: move.substring(2,4),
+        promotion: 'q'
+      });
 
       board.position(game.fen());
-
-      return;
     }
-  }
-
+  };
+}
   // सभी legal moves
   let moves = game.moves({verbose:true});
 
