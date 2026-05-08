@@ -63,9 +63,11 @@ let engine = new Worker("stockfish.js");
 let skillLevel = 8;
 
 let gmStyle = {
-  openingMoves: ["e4","Nf3","Bb5","O-O"],
+  openingMoves: ["e4","Nf3","Bb5","Ba4","O-O"],
   moveTime: 1200
-};  
+};
+
+let openingIndex = 0;  
   
 function startGame(){
 
@@ -123,7 +125,21 @@ let moveIndex = 0;
 
 // Better AI Move
 function aiMove(){
+if(openingIndex < gmStyle.openingMoves.length){
 
+  let openingMove = gmStyle.openingMoves[openingIndex];
+
+  let result = game.move(openingMove);
+
+  if(result !== null){
+
+    openingIndex++;
+
+    board.position(game.fen());
+
+    return;
+  }
+}
   engine.postMessage("position fen " + game.fen());
 
   engine.postMessage("go movetime " + gmStyle.moveTime);
