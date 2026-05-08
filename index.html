@@ -94,7 +94,6 @@ function onDrop(source, target){
   setTimeout(aiMove,500);
 }
 // Anand opening memory
-// Anand opening memory
 let anandLine = [
   "e5",
   "Nc6",
@@ -109,7 +108,7 @@ let moveIndex = 0;
 // Better AI Move
 function aiMove(){
 
-  // पहले opening line
+  // पहले Anand opening line
   if(moveIndex < anandLine.length){
 
     let move = anandLine[moveIndex];
@@ -133,15 +132,14 @@ function aiMove(){
     return;
   }
 
-  // सबसे पहले capture ढूंढो
+  // capture moves
   let captureMoves = moves.filter(m => m.flags.includes('c'));
 
   let selectedMove;
 
-  // अगर capture available है
+  // अगर capture मिले
   if(captureMoves.length > 0){
 
-    // सबसे valuable capture चुनो
     let pieceValue = {
       p:1,
       n:3,
@@ -159,15 +157,55 @@ function aiMove(){
 
   } else {
 
-    // center control preference
-    let centerMoves = moves.filter(m =>
-      ['d4','e4','d5','e5'].includes(m.to)
-    );
+    // safe moves खोजो
+    let safeMoves = [];
 
-    if(centerMoves.length > 0){
-      selectedMove = centerMoves[Math.floor(Math.random()*centerMoves.length)];
+    moves.forEach(m => {
+
+      game.move(m);
+
+      let attacked = false;
+
+      let opponentMoves = game.moves({verbose:true});
+
+      for(let opp of opponentMoves){
+
+        if(opp.flags.includes('c')){
+          attacked = true;
+          break;
+        }
+      }
+
+      game.undo();
+
+      if(!attacked){
+        safeMoves.push(m);
+      }
+    });
+
+    // safe move मिले
+    if(safeMoves.length > 0){
+
+      selectedMove =
+        safeMoves[Math.floor(Math.random()*safeMoves.length)];
+
     } else {
-      selectedMove = moves[Math.floor(Math.random()*moves.length)];
+
+      // center preference
+      let centerMoves = moves.filter(m =>
+        ['d4','e4','d5','e5'].includes(m.to)
+      );
+
+      if(centerMoves.length > 0){
+
+        selectedMove =
+          centerMoves[Math.floor(Math.random()*centerMoves.length)];
+
+      } else {
+
+        selectedMove =
+          moves[Math.floor(Math.random()*moves.length)];
+      }
     }
   }
 
