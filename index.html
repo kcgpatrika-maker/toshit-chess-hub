@@ -60,11 +60,16 @@ button{
 let game;
 let board;
 let engine = new Worker("stockfish.js");
+let skillLevel = 8;  
   
 function startGame(){
 
   game = new Chess();
+engine.postMessage("uci");
 
+engine.postMessage("setoption name Skill Level value " + skillLevel);
+
+engine.postMessage("ucinewgame");
 board = Chessboard('board', {
   position: 'start',
   orientation: 'black',
