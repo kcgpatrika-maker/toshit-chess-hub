@@ -79,17 +79,12 @@ engine.postMessage("setoption name Skill Level value " + skillLevel);
 engine.postMessage("ucinewgame");
 board = Chessboard('board', {
   position: 'start',
-  orientation: 'black',
+ orientation: 'white',
   draggable: true,
     pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
     onDrop: onDrop
   });
-
-  setTimeout(function(){
-    game.move('e4');
-    board.position(game.fen());
-  },500);
-}
+  }
 
 function onDrop(source, target){
 
