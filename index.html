@@ -60,7 +60,12 @@ button{
 let game;
 let board;
 let engine = new Worker("stockfish.js");
-let skillLevel = 8;  
+let skillLevel = 8;
+
+let gmStyle = {
+  openingMoves: ["e4","Nf3","Bb5","O-O"],
+  moveTime: 1200
+};  
   
 function startGame(){
 
@@ -121,8 +126,8 @@ function aiMove(){
 
   engine.postMessage("position fen " + game.fen());
 
-  engine.postMessage("go movetime 1200");
-
+  engine.postMessage("go movetime " + gmStyle.moveTime);
+  
   engine.onmessage = function(event){
 
     let line = event.data;
