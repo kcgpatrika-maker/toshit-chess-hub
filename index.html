@@ -81,11 +81,42 @@ board = Chessboard('board', {
   position: 'start',
  orientation: 'white',
   draggable: true,
+  moveSpeed: 200,
+  snapbackSpeed: 200,
+  snapSpeed: 100,
     pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
     onDrop: onDrop
   });
   }
+$('#board').on('touchstart click', '.square-55d63', function(){
 
+  let square = $(this).attr('data-square');
+
+  if(!window.selectedSquare){
+
+    window.selectedSquare = square;
+
+    return;
+  }
+
+  let move = game.move({
+    from: window.selectedSquare,
+    to: square,
+    promotion: 'q'
+  });
+
+  window.selectedSquare = null;
+
+  if(move === null){
+    return;
+  }
+
+  board.position(game.fen());
+
+  setTimeout(function(){
+    aiMove();
+  },300);
+});
 function onDrop(source, target){
 
   let move = game.move({
