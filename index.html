@@ -60,6 +60,7 @@ button{
 let game;
 let board;
 let engine = new Worker("stockfish.js");
+let playerTurn = true;  
 let skillLevel = 8;
 
 let gmStyle = {
@@ -118,7 +119,9 @@ $('#board').on('touchstart click', '.square-55d63', function(){
   },300);
 });
 function onDrop(source, target){
-
+if(!playerTurn){
+  return 'snapback';
+}
   let move = game.move({
     from: source,
     to: target,
@@ -130,7 +133,7 @@ function onDrop(source, target){
   }
 
   board.position(game.fen());
-
+playerTurn = false;
   setTimeout(function(){
     aiMove();
   },300);
@@ -162,7 +165,7 @@ if(openingIndex < gmStyle.openingMoves.length){
     openingIndex++;
 
     board.position(game.fen());
-
+playerTurn = true;
     return;
   }
 }
