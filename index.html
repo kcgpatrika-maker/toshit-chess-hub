@@ -139,11 +139,13 @@ if(!playerTurn){
     return 'snapback';
   }
 
-  board.position(game.fen());
 playerTurn = false;
-  setTimeout(function(){
-    aiMove();
-  },300);
+
+board.position(game.fen());
+
+setTimeout(function(){
+  aiMove();
+},300);
 
   return;
 }
@@ -202,6 +204,9 @@ game.move({
   promotion: 'q'
 });
       board.position(game.fen());
+
+playerTurn = true;
+
 $('#board .square-55d63').removeClass('highlight-white');
 
 $('#board .square-' + fromSquare).addClass('highlight-white');
