@@ -123,7 +123,25 @@ let gmStyle = {
   moveTime: 1200
 };
 
-let openingIndex = 0;  
+let openingIndex = 0;
+function updateClockDisplay(){
+
+  let pMin = Math.floor(playerTime / 60);
+  let pSec = playerTime % 60;
+
+  let gMin = Math.floor(gmTime / 60);
+  let gSec = gmTime % 60;
+
+  document.getElementById("playerClock").innerText =
+    "YOU • " +
+    String(pMin).padStart(2,'0') + ":" +
+    String(pSec).padStart(2,'0');
+
+  document.getElementById("gmClock").innerText =
+    "GM • " +
+    String(gMin).padStart(2,'0') + ":" +
+    String(gSec).padStart(2,'0');
+}  
 function resetGame(){
 
   game = new Chess();
@@ -142,24 +160,7 @@ function resetGame(){
 function startGame(){
 
  resetGame();
-function updateClockDisplay(){
 
-  let pMin = Math.floor(playerTime / 60);
-  let pSec = playerTime % 60;
-
-  let gMin = Math.floor(gmTime / 60);
-  let gSec = gmTime % 60;
-
-  document.getElementById("playerClock").innerText =
-    "YOU • " +
-    String(pMin).padStart(2,'0') + ":" +
-    String(pSec).padStart(2,'0');
-
-  document.getElementById("gmClock").innerText =
-    "GM • " +
-    String(gMin).padStart(2,'0') + ":" +
-    String(gSec).padStart(2,'0');
-}
   function startClock(){
 
   clearInterval(clockInterval);
