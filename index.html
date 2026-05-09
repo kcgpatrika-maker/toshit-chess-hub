@@ -49,13 +49,13 @@ button{
 }
 #clockArea{
 
-  display:none;
-
   width:95%;
 
   max-width:360px;
 
   margin:20px auto;
+
+  display:flex;
 
   flex-direction:row;
 
@@ -151,7 +151,10 @@ button{
 
 </div>
 <script>
+window.onload = function(){
 
+  document.getElementById("clockArea").style.display = "none";
+};
 let game;
 let board;
 let engine = new Worker("stockfish.js");
@@ -261,7 +264,7 @@ engine.postMessage("setoption name Skill Level value " + skillLevel);
 engine.postMessage("ucinewgame");
 document.getElementById("board").innerHTML = "";  
 startClock();
-document.getElementById("clockArea").style.display = "block";  
+document.getElementById("clockArea").style.display = "flex";  
   board = Chessboard('board', {
   position: 'start',
  orientation: 'white',
