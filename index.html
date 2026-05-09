@@ -111,7 +111,11 @@ button{
 let game;
 let board;
 let engine = new Worker("stockfish.js");
-let playerTurn = true;  
+let playerTurn = true;
+let playerTime = 300;
+let gmTime = 300;
+
+let clockInterval;  
 let skillLevel = 8;
 
 let gmStyle = {
@@ -128,18 +132,79 @@ function resetGame(){
 
   playerTurn = true;
 
+  playerTime = 300;
+  gmTime = 300;
+
+  updateClockDisplay();
+
   engine.postMessage("ucinewgame");
 }  
 function startGame(){
 
  resetGame();
+function updateClockDisplay(){
+
+  let pMin = Math.floor(playerTime / 60);
+  let pSec = playerTime % 60;
+
+  let gMin = Math.floor(gmTime / 60);
+  let gSec = gmTime % 60;
+
+  document.getElementById("playerClock").innerText =
+    "YOU • " +
+    String(pMin).padStart(2,'0') + ":" +
+    String(pSec).padStart(2,'0');
+
+  document.getElementById("gmClock").innerText =
+    "GM • " +
+    String(gMin).padStart(2,'0') + ":" +
+    String(gSec).padStart(2,'0');
+}
+  function startClock(){
+
+  clearInterval(clockInterval);
+
+  clockInterval = setInterval(function(){
+
+    if(playerTurn){
+
+      playerTime--;
+
+      if(playerTime <= 0){
+
+        clearInterval(clockInterval);
+
+        alert("YOU LOST ON TIME");
+
+        return;
+      }
+
+    } else {
+
+      gmTime--;
+
+      if(gmTime <= 0){
+
+        clearInterval(clockInterval);
+
+        alert("GM LOST ON TIME");
+
+        return;
+      }
+    }
+
+    updateClockDisplay();
+
+  },1000);
+}
 engine.postMessage("uci");
 
 engine.postMessage("setoption name Skill Level value " + skillLevel);
 
 engine.postMessage("ucinewgame");
 document.getElementById("board").innerHTML = "";  
-board = Chessboard('board', {
+startClock();
+  board = Chessboard('board', {
   position: 'start',
  orientation: 'white',
   draggable: true,
