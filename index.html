@@ -41,7 +41,7 @@ button{
 }
 
 #board{
-  width:320px;
+  width:360px;
   margin:20px auto;
 }
 .highlight-white {
@@ -49,36 +49,70 @@ button{
 }
 #clockArea{
   display:none;
-  width:320px;
+
+  width:360px;
+
   margin:20px auto;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:stretch;
+
+  gap:10px;
 }
-.clock-btn{
-  width:100%;
-  margin:10px 0;
-  padding:18px;
-  border:none;
-  border-radius:12px;
+
+#clockLeft{
+  width:270px;
+}
+
+.clock-box{
 
   background:#111;
+
   color:#00ff90;
 
-  font-size:28px;
+  border-radius:10px;
+
+  padding:16px;
+
+  margin-bottom:10px;
+
+  font-size:26px;
+
   font-weight:bold;
 
   letter-spacing:2px;
 
   box-shadow:
-    0 0 10px rgba(0,255,120,0.4);
-
-  transition:0.2s;
+    0 0 10px rgba(0,255,120,0.3);
 }
 
-.active-clock{
+#pushBtn{
+
+  width:70px;
+
+  border:none;
+
+  border-radius:12px;
+
   background:#00c853;
+
   color:white;
 
+  font-size:24px;
+
+  font-weight:bold;
+
+  line-height:1.2;
+
   box-shadow:
-    0 0 20px rgba(0,255,120,0.8);
+    0 0 15px rgba(0,255,120,0.5);
+}
+
+#pushBtn:active{
+  transform:scale(0.96);
 }
 
 .low-time{
@@ -97,12 +131,20 @@ button{
 <div id="board"></div>
 <div id="clockArea">
 
-  <button id="gmClock" class="clock-btn">
-    GM • 05:00
-  </button>
+  <div id="clockLeft">
 
-  <button id="playerClock" class="clock-btn active-clock">
-    YOU • 05:00
+    <div id="gmClock" class="clock-box">
+      GM • 05:00
+    </div>
+
+    <div id="playerClock" class="clock-box">
+      YOU • 05:00
+    </div>
+
+  </div>
+
+  <button id="pushBtn">
+    P<br>U<br>S<br>H
   </button>
 
 </div>
@@ -198,17 +240,13 @@ function startGame(){
 
   },1000);
 }
-  document.getElementById("playerClock").onclick = function(){
+ document.getElementById("pushBtn").onclick = function(){
 
   if(playerTurn === false){
     return;
   }
 
   playerTurn = false;
-
-  document.getElementById("playerClock").classList.remove("active-clock");
-
-  document.getElementById("gmClock").classList.add("active-clock");
 
   setTimeout(function(){
     aiMove();
