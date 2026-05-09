@@ -198,6 +198,22 @@ function startGame(){
 
   },1000);
 }
+  document.getElementById("playerClock").onclick = function(){
+
+  if(playerTurn === false){
+    return;
+  }
+
+  playerTurn = false;
+
+  document.getElementById("playerClock").classList.remove("active-clock");
+
+  document.getElementById("gmClock").classList.add("active-clock");
+
+  setTimeout(function(){
+    aiMove();
+  },300);
+};
 engine.postMessage("uci");
 
 engine.postMessage("setoption name Skill Level value " + skillLevel);
@@ -268,10 +284,9 @@ playerTurn = false;
 
 board.position(game.fen());
 
-setTimeout(function(){
-  aiMove();
-},300);
+document.getElementById("playerClock").classList.add("active-clock");
 
+document.getElementById("gmClock").classList.remove("active-clock");
   return;
 }
 // Anand opening memory
@@ -300,6 +315,9 @@ if(openingIndex < gmStyle.openingMoves.length){
 
     board.position(game.fen());
 playerTurn = true;
+document.getElementById("gmClock").classList.remove("active-clock");
+
+document.getElementById("playerClock").classList.add("active-clock");
     return;
   }
 }
