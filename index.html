@@ -72,15 +72,25 @@ let gmStyle = {
 };
 
 let openingIndex = 0;  
-  
-function startGame(){
+function resetGame(){
 
   game = new Chess();
+
+  openingIndex = 0;
+
+  playerTurn = true;
+
+  engine.postMessage("ucinewgame");
+}  
+function startGame(){
+
+ resetGame();
 engine.postMessage("uci");
 
 engine.postMessage("setoption name Skill Level value " + skillLevel);
 
 engine.postMessage("ucinewgame");
+document.getElementById("board").innerHTML = "";  
 board = Chessboard('board', {
   position: 'start',
  orientation: 'white',
