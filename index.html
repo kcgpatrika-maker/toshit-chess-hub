@@ -172,6 +172,43 @@ let gmStyle = {
 };
 
 let openingIndex = 0;
+let gmProfiles = {
+
+  anand: {
+    name: "Anand",
+    moveTime: 700,
+    openingMoves: ["e5","Nc6","Nf6","Bc5","d6","O-O"]
+  },
+
+  tal: {
+    name: "Tal",
+    moveTime: 500,
+    openingMoves: ["e5","f5","Nc6","Bc5","Qh4"]
+  },
+
+  carlsen: {
+    name: "Carlsen",
+    moveTime: 1200,
+    openingMoves: ["e5","Nc6","Nf6","Be7","O-O"]
+  },
+
+  fischer: {
+    name: "Fischer",
+    moveTime: 900,
+    openingMoves: ["e5","Nc6","Bb4","Ba5","Nf6"]
+  },
+
+  hikaru: {
+    name: "Hikaru",
+    moveTime: 300,
+    openingMoves: ["c5","Nc6","e6","Nf6","Qc7"]
+  }
+
+};
+
+let selectedGM = "anand";
+
+let gmStyle = gmProfiles[selectedGM];  
 function updateClockDisplay(){
 
   let pMin = Math.floor(playerTime / 60);
@@ -191,7 +228,7 @@ function updateClockDisplay(){
     String(gSec).padStart(2,'0');
 }  
 function resetGame(){
-
+gmStyle = gmProfiles[selectedGM];
   game = new Chess();
 
   openingIndex = 0;
@@ -333,15 +370,6 @@ document.getElementById("playerClock").classList.add("active-clock");
 document.getElementById("gmClock").classList.remove("active-clock");
   return;
 }
-// Anand opening memory
-let anandLine = [
-  "e5",
-  "Nc6",
-  "Nf6",
-  "Bc5",
-  "d6",
-  "O-O"
-];
 
 let moveIndex = 0;
 
