@@ -55,6 +55,8 @@ button{
 
   margin:8px auto 20px auto;
 
+  display:flex;
+
   flex-direction:row;
 
   justify-content:space-between;
@@ -164,44 +166,12 @@ let gmTime = 300;
 let clockInterval;  
 let skillLevel = 8;
 
-let openingIndex = 0;
-let gmProfiles = {
-
-  anand: {
-    name: "Anand",
-    moveTime: 700,
-    openingMoves: ["e5","Nc6","Nf6","Bc5","d6","O-O"]
-  },
-
-  tal: {
-    name: "Tal",
-    moveTime: 500,
-    openingMoves: ["e5","f5","Nc6","Bc5","Qh4"]
-  },
-
-  carlsen: {
-    name: "Carlsen",
-    moveTime: 1200,
-    openingMoves: ["e5","Nc6","Nf6","Be7","O-O"]
-  },
-
-  fischer: {
-    name: "Fischer",
-    moveTime: 900,
-    openingMoves: ["e5","Nc6","Bb4","Ba5","Nf6"]
-  },
-
-  hikaru: {
-    name: "Hikaru",
-    moveTime: 300,
-    openingMoves: ["c5","Nc6","e6","Nf6","Qc7"]
-  }
-
+let gmStyle = {
+  openingMoves: ["e4","Nf3","Bb5","Ba4","O-O"],
+  moveTime: 1200
 };
 
-let selectedGM = "anand";
-
-let gmStyle = gmProfiles[selectedGM];  
+let openingIndex = 0;
 function updateClockDisplay(){
 
   let pMin = Math.floor(playerTime / 60);
@@ -221,7 +191,7 @@ function updateClockDisplay(){
     String(gSec).padStart(2,'0');
 }  
 function resetGame(){
-gmStyle = gmProfiles[selectedGM];
+
   game = new Chess();
 
   openingIndex = 0;
@@ -279,7 +249,6 @@ function startGame(){
  document.getElementById("pushBtn").onclick = function(){
 
   if(playerTurn === false){
-    console.log("PUSH WORKING");
     return;
   }
 
@@ -364,14 +333,40 @@ document.getElementById("playerClock").classList.add("active-clock");
 document.getElementById("gmClock").classList.remove("active-clock");
   return;
 }
+// Anand opening memory
+let anandLine = [
+  "e5",
+  "Nc6",
+  "Nf6",
+  "Bc5",
+  "d6",
+  "O-O"
+];
 
 let moveIndex = 0;
 
 // Better AI Move
 function aiMove(){
-console.log(gmStyle);
+if(openingIndex < gmStyle.openingMoves.length){
+
+  let openingMove = gmStyle.openingMoves[openingIndex];
+
+  let result = game.move(openingMove);
+
+  if(result !== null){
+
+    openingIndex++;
+
+    board.position(game.fen());
+playerTurn = true;
+document.getElementById("gmClock").classList.remove("active-clock");
+
+document.getElementById("playerClock").classList.add("active-clock");
+    return;
+  }
+}
   engine.postMessage("position fen " + game.fen());
-playerTurn = false;
+
   engine.postMessage("go movetime " + gmStyle.moveTime);
   
   engine.onmessage = function(event){
