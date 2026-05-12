@@ -1,4 +1,256 @@
 <!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toshit Chess Hub</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111111">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css"/>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
+
+<style>
+body{
+  margin:0;
+  background:#111;
+  color:white;
+  font-family:Arial;
+  text-align:center;
+}
+
+h1{
+  color:#ffcc00;
+  margin-top:20px;
+  font-size:28px;
+}
+
+h2,h3{
+  margin:15px 0;
+}
+
+.screen{
+  display:none;
+  padding-bottom:30px;
+}
+
+.active{
+  display:block;
+}
+
+button{
+  width:90%;
+  max-width:340px;
+  padding:15px;
+  margin:10px auto;
+  border:none;
+  border-radius:12px;
+  font-size:18px;
+  display:block;
+}
+
+.main-btn{
+  background:#1e88e5;
+  color:white;
+}
+
+.start-btn{
+  background:#00c853;
+  color:white;
+  font-weight:bold;
+}
+
+.back-btn{
+  background:#333;
+  color:white;
+}
+
+.desc{
+  width:90%;
+  max-width:340px;
+  margin:0 auto 15px auto;
+  color:#bbb;
+  font-size:14px;
+  line-height:1.5;
+}
+
+#gmButtons{
+  width:95%;
+  max-width:360px;
+  margin:10px auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+#gmButtons button{
+  background:#222;
+  color:white;
+  border:1px solid #444;
+  margin:0;
+}
+
+.selected-btn{
+  background:#00c853 !important;
+}
+
+#timeButtons{
+  width:95%;
+  max-width:360px;
+  margin:10px auto;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+}
+
+#timeButtons button{
+  background:#222;
+  color:white;
+  border:1px solid #444;
+  margin:0;
+}
+
+#board{
+  width:420px;
+  max-width:95vw;
+  margin:20px auto 10px auto;
+}
+
+#gameHeader{
+  color:#ffcc00;
+  font-size:22px;
+  margin-top:15px;
+}
+
+.highlight-white{
+  box-shadow: inset 0 0 3px 3px yellow;
+}
+
+#clockArea{
+  width:95%;
+  max-width:420px;
+  margin:8px auto 20px auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:8px;
+}
+
+#clockLeft{
+  flex:1;
+}
+
+.clock-box{
+  background:#111;
+  color:#00ff90;
+  border-radius:10px;
+  padding:16px;
+  margin-bottom:10px;
+  font-size:26px;
+  font-weight:bold;
+  letter-spacing:2px;
+  box-shadow:0 0 10px rgba(0,255,120,0.3);
+}
+
+.low-time{
+  background:#c62828 !important;
+  color:white !important;
+}
+
+#pushBtn{
+  width:80px;
+  height:140px;
+  border:none;
+  border-radius:12px;
+  background:#00c853;
+  color:white;
+  font-size:24px;
+  font-weight:bold;
+  line-height:1.2;
+  margin-top:2px;
+  box-shadow:0 0 15px rgba(0,255,120,0.5);
+}
+
+#pushBtn:active{
+  transform:scale(0.96);
+}
+
+.opt{
+  background:#222;
+  color:white;
+}
+
+.selected{
+  background:#00c853;
+}
+
+@media(max-width:480px){
+
+  #board{
+    width:96vw;
+  }
+
+  .clock-box{
+    font-size:22px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<h1>♕ TOSHIT CHESS HUB ♔</h1>
+
+<!-- HOME -->
+<div id="home" class="screen active">
+
+<button class="main-btn" onclick="go('play')">
+▶ Play Like GM
+</button>
+<div class="desc">
+Grandmaster की तरह खेलने के लिए training करें
+</div>
+
+<button class="main-btn" onclick="startTraining()">
+🧠 Daily Training
+</button>
+<div class="desc">
+Puzzle + Game + Analysis workflow
+</div>
+
+<button class="main-btn" onclick="go('tools')">
+⚡ Quick Tools
+</button>
+<div class="desc">
+Quick chess utilities
+</div>
+
+<button class="main-btn" onclick="go('stats')">
+📊 My Progress
+</button>
+<div class="desc">
+Daily improvement tracking
+</div>
+
+<button class="main-btn" onclick="openRajasthan()">
+🏆 Rajasthan Chess Results
+</button>
+<div class="desc">
+राजस्थान tournaments और results
+</div>
+
+</div>
+
+<!-- PLAY -->
+<div id="play" class="screen">
+
+<h2>Select Grandmaster</h2>
+
 <div id="gmButtons">
 
 <button onclick="selectGM('anand',this)">Anand</button>
@@ -74,4 +326,478 @@ P<br>U<br>S<br>H
 
 <button class="main-btn" onclick="openPuzzle()">
 🧠 Puzzle Training
+</button>
+
+<button class="main-btn" onclick="openAnalysis()">
+📊 Analysis Board
+</button>
+
+<button class="back-btn" onclick="go('home')">
+⬅ Back
+</button>
+
+</div>
+
+<!-- REVIEW -->
+<div id="review" class="screen">
+
+<h2>📊 Game Review</h2>
+
+<p>❌ Biggest Mistake?</p>
+<button class="opt" onclick="selectOpt(1,this)">Blunder</button>
+<button class="opt" onclick="selectOpt(1,this)">Time Pressure</button>
+<button class="opt" onclick="selectOpt(1,this)">Opening Mistake</button>
+
+<p>⚠️ Missed Opportunity?</p>
+<button class="opt" onclick="selectOpt(2,this)">Mate Miss</button>
+<button class="opt" onclick="selectOpt(2,this)">Capture Miss</button>
+<button class="opt" onclick="selectOpt(2,this)">Better Move</button>
+
+<p>✔ Best Part?</p>
+<button class="opt" onclick="selectOpt(3,this)">Good Attack</button>
+<button class="opt" onclick="selectOpt(3,this)">Solid Defense</button>
+<button class="opt" onclick="selectOpt(3,this)">Lucky Win</button>
+
+<button class="start-btn" id="finishBtn" disabled
+onclick="finishReview()">
+Finish Review
+</button>
+
+</div>
+
+<!-- STATS -->
+<div id="stats" class="screen">
+
+<h2>📊 My Progress</h2>
+
+<p>Games: <span id="games">0</span></p>
+<p>Reviews: <span id="reviews">0</span></p>
+
+<button class="main-btn" onclick="resetStats()">
+Reset Stats
+</button>
+
+<button class="back-btn" onclick="go('home')">
+⬅ Back
+</button>
+
+</div>
+
+<script>
+
+let game;
+let board;
+
+let engine = new Worker("stockfish.js");
+
+let selectedGM = "anand";
+let selectedTime = "rapid";
+
+let playerTurn = true;
+
+let playerTime = 600;
+let gmTime = 600;
+
+let clockInterval;
+
+let reviewData = {1:false,2:false,3:false};
+
+let gmProfiles = {
+
+  anand:{
+    name:"Anand",
+    moveTime:1200,
+    skill:12
+  },
+
+  carlsen:{
+    name:"Carlsen",
+    moveTime:1800,
+    skill:18
+  },
+
+  tal:{
+    name:"Tal",
+    moveTime:900,
+    skill:11
+  },
+
+  hikaru:{
+    name:"Hikaru",
+    moveTime:500,
+    skill:10
+  },
+
+  kasparov:{
+    name:"Kasparov",
+    moveTime:1600,
+    skill:17
+  },
+
+  fischer:{
+    name:"Fischer",
+    moveTime:1700,
+    skill:17
+  }
+};
+
+function go(id){
+
+  document.querySelectorAll('.screen')
+  .forEach(s=>s.classList.remove('active'));
+
+  document.getElementById(id)
+  .classList.add('active');
+}
+
+function selectGM(name,btn){
+
+  selectedGM = name;
+
+  document.querySelectorAll('#gmButtons button')
+  .forEach(b=>b.classList.remove('selected-btn'));
+
+  btn.classList.add('selected-btn');
+}
+
+function selectTime(type,btn){
+
+  selectedTime = type;
+
+  document.querySelectorAll('#timeButtons button')
+  .forEach(b=>b.classList.remove('selected-btn'));
+
+  btn.classList.add('selected-btn');
+}
+
+function setClock(){
+
+  if(selectedTime === 'blitz'){
+
+    playerTime = 180;
+    gmTime = 180;
+  }
+
+  if(selectedTime === 'rapid'){
+
+    playerTime = 600;
+    gmTime = 600;
+  }
+
+  if(selectedTime === 'classical'){
+
+    playerTime = 1800;
+    gmTime = 1800;
+  }
+}
+
+function updateClockDisplay(){
+
+  let pMin = Math.floor(playerTime / 60);
+  let pSec = playerTime % 60;
+
+  let gMin = Math.floor(gmTime / 60);
+  let gSec = gmTime % 60;
+
+  document.getElementById('playerClock').innerText =
+  'YOU • ' +
+  String(pMin).padStart(2,'0') + ':' +
+  String(pSec).padStart(2,'0');
+
+  document.getElementById('gmClock').innerText =
+  gmProfiles[selectedGM].name.toUpperCase() + ' • ' +
+  String(gMin).padStart(2,'0') + ':' +
+  String(gSec).padStart(2,'0');
+}
+
+function startClock(){
+
+  clearInterval(clockInterval);
+
+  clockInterval = setInterval(function(){
+
+    if(playerTurn){
+
+      playerTime--;
+
+      if(playerTime <= 0){
+
+        clearInterval(clockInterval);
+
+        alert('YOU LOST ON TIME');
+      }
+
+    } else {
+
+      gmTime--;
+
+      if(gmTime <= 0){
+
+        clearInterval(clockInterval);
+
+        alert(gmProfiles[selectedGM].name + ' LOST ON TIME');
+      }
+    }
+
+    updateClockDisplay();
+
+  },1000);
+}
+
+function startGame(){
+
+  go('game');
+
+  setClock();
+
+  updateClockDisplay();
+
+  game = new Chess();
+
+  playerTurn = true;
+
+  document.getElementById('gameHeader').innerText =
+  '♕ Play Against ' +
+  gmProfiles[selectedGM].name +
+  ' ♔';
+
+  document.getElementById('board').innerHTML = '';
+
+  board = Chessboard('board',{
+
+    position:'start',
+
+    orientation:'white',
+
+    draggable:true,
+
+    moveSpeed:200,
+
+    snapbackSpeed:200,
+
+    snapSpeed:100,
+
+    pieceTheme:
+'https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/img/chesspieces/wikipedia/{piece}.png',
+
+    onDrop:onDrop
+  });
+
+  engine.postMessage('uci');
+
+  engine.postMessage(
+    'setoption name Skill Level value ' +
+    gmProfiles[selectedGM].skill
+  );
+
+  startClock();
+}
+
+function onDrop(source,target){
+
+  if(!playerTurn){
+    return 'snapback';
+  }
+
+  let move = game.move({
+
+    from:source,
+
+    to:target,
+
+    promotion:'q'
+  });
+
+  if(move === null){
+    return 'snapback';
+  }
+
+  board.position(game.fen());
+
+  $('#board .square-55d63')
+  .removeClass('highlight-white');
+
+  $('#board .square-' + source)
+  .addClass('highlight-white');
+
+  $('#board .square-' + target)
+  .addClass('highlight-white');
+}
+
+document.getElementById('pushBtn').onclick = function(){
+
+  if(playerTurn === false){
+    return;
+  }
+
+  playerTurn = false;
+
+  setTimeout(function(){
+
+    aiMove();
+
+  },300);
+};
+
+function aiMove(){
+
+  engine.postMessage(
+    'position fen ' + game.fen()
+  );
+
+  engine.postMessage(
+    'go movetime ' +
+    gmProfiles[selectedGM].moveTime
+  );
+
+  engine.onmessage = function(event){
+
+    let line = event.data;
+
+    if(line.startsWith('bestmove')){
+
+      let move = line.split(' ')[1];
+
+      if(move === '(none)'){
+        return;
+      }
+
+      let fromSquare = move.substring(0,2);
+      let toSquare = move.substring(2,4);
+
+      game.move({
+
+        from:fromSquare,
+
+        to:toSquare,
+
+        promotion:'q'
+      });
+
+      board.position(game.fen());
+
+      playerTurn = true;
+
+      $('#board .square-55d63')
+      .removeClass('highlight-white');
+
+      $('#board .square-' + fromSquare)
+      .addClass('highlight-white');
+
+      $('#board .square-' + toSquare)
+      .addClass('highlight-white');
+    }
+  };
+}
+
+function startTraining(){
+
+  window.open('https://lichess.org/training','_blank');
+
+  setTimeout(()=>{
+
+    window.open(
+'https://www.chess.com/play/computer',
+'_blank');
+
+  },3000);
+}
+
+function openGame(){
+  window.open('https://www.chess.com/play','_blank');
+}
+
+function openPuzzle(){
+  window.open('https://lichess.org/training','_blank');
+}
+
+function openAnalysis(){
+  window.open('https://lichess.org/analysis','_blank');
+}
+
+function selectOpt(group,el){
+
+  document.querySelectorAll('.opt')
+  .forEach(b=>{
+
+    if(b.parentElement === el.parentElement){
+      b.classList.remove('selected');
+    }
+  });
+
+  el.classList.add('selected');
+
+  reviewData[group] = true;
+
+  checkFinish();
+}
+
+function checkFinish(){
+
+  if(reviewData[1] &&
+     reviewData[2] &&
+     reviewData[3]){
+
+    document.getElementById('finishBtn')
+    .disabled = false;
+  }
+}
+
+function finishReview(){
+
+  let g = parseInt(
+    localStorage.getItem('games') || 0
+  );
+
+  let r = parseInt(
+    localStorage.getItem('reviews') || 0
+  );
+
+  localStorage.setItem('games',g+1);
+  localStorage.setItem('reviews',r+1);
+
+  loadStats();
+
+  go('home');
+}
+
+function loadStats(){
+
+  document.getElementById('games').innerText =
+  localStorage.getItem('games') || 0;
+
+  document.getElementById('reviews').innerText =
+  localStorage.getItem('reviews') || 0;
+}
+
+function resetStats(){
+
+  localStorage.clear();
+
+  loadStats();
+}
+
+function openRajasthan(){
+
+  window.open(
+'https://chess-results.com/fed.aspx?lan=1&fed=IND&bdld1=22',
+'_blank');
+}
+
+window.onload = function(){
+
+  loadStats();
+};
+
+if('serviceWorker' in navigator){
+
+  window.addEventListener('load',function(){
+
+    navigator.serviceWorker.register('sw.js');
+  });
+}
+
+</script>
+
+</body>
 </html>
