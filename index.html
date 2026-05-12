@@ -12,7 +12,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
-<script src="stockfish.js"></script> 
+<script src="stockfish.js"></script>  
 <style>
 body{
   margin:0;
@@ -121,6 +121,33 @@ button{
 .low-time{
   background:#c62828 !important;
   color:white !important;
+}
+#gmButtons{
+
+  width:95%;
+
+  max-width:360px;
+
+  margin:15px auto;
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:8px;
+}
+
+#gmButtons button{
+
+  margin:0;
+
+  padding:12px;
+
+  font-size:16px;
+
+  background:#333;
+
+  border:1px solid #555;
 }  
 </style>
 </head>
@@ -128,7 +155,25 @@ button{
 <body>
 
 <h2>♕ Play Like GM - Anand ♔</h2>
+<div id="gmButtons">
 
+  <button onclick="selectGM('anand')">
+    ♔ Anand
+  </button>
+
+  <button onclick="selectGM('tal')">
+    ⚡ Tal
+  </button>
+
+  <button onclick="selectGM('carlsen')">
+    🧠 Carlsen
+  </button>
+
+  <button onclick="selectGM('hikaru')">
+    🔥 Hikaru
+  </button>
+
+</div>
 <button onclick="startGame()">🚀 START GAME</button>
 
 <div id="board"></div>
@@ -280,7 +325,15 @@ function resetGame(){
 
   engine.postMessage("ucinewgame");
 }
+function selectGM(name){
 
+  selectedGM = name;
+
+  gmStyle = gmProfiles[selectedGM];
+
+  document.querySelector("h2").innerText =
+    "♕ Play Like GM - " + gmStyle.name + " ♔";
+}
 function startGame(){
 
   gmStyle = gmProfiles[selectedGM];
@@ -312,7 +365,7 @@ function startGame(){
     snapSpeed: 100,
 
     pieceTheme:
-'https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/img/chesspieces/wikipedia/{piece}.png',
+    'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
 
     onDrop: onDrop
   });
