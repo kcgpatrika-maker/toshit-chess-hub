@@ -219,32 +219,34 @@ let selectedGM = "anand";
 
 let gmProfiles = {
 
-  anand: {
-    name: "Anand",
+  beginner: {
+    name: "Beginner",
+    moveTime: 400,
+    skill: 2
+  },
+
+  intermediate: {
+    name: "Intermediate",
+    moveTime: 700,
+    skill: 6
+  },
+
+  advanced: {
+    name: "Advanced",
     moveTime: 1200,
-    skill: 12,
-    style: "balanced"
+    skill: 10
   },
 
-  tal: {
-    name: "Tal",
-    moveTime: 500,
-    skill: 8,
-    style: "aggressive"
-  },
-
-  carlsen: {
-    name: "Carlsen",
+  expert: {
+    name: "Expert",
     moveTime: 1800,
-    skill: 18,
-    style: "positional"
+    skill: 14
   },
 
-  hikaru: {
-    name: "Hikaru",
-    moveTime: 300,
-    skill: 10,
-    style: "fast"
+  master: {
+    name: "Master",
+    moveTime: 2500,
+    skill: 18
   }
 
 };
