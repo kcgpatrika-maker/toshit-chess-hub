@@ -1,500 +1,77 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Toshit Chess Hub</title>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css"/>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
-<script src="stockfish.js"></script>  
-<style>
-body{
-  margin:0;
-  background:#222;
-  color:white;
-  text-align:center;
-  font-family:Arial;
-}
-
-h2{
-  color:#ffcc00;
-  margin-top:20px;
-}
-
-button{
-  width:90%;
-  max-width:320px;
-  padding:15px;
-  margin:15px auto;
-  border:none;
-  border-radius:10px;
-  background:#1e88e5;
-  color:white;
-  font-size:18px;
-  display:block;
-}
-
-#board{
-  width:360px;
-  margin:20px auto;
-}
-.highlight-white {
-  box-shadow: inset 0 0 3px 3px yellow;
-}
-#clockArea{
-
-  width:95%;
-
-  max-width:360px;
-
-  margin:8px auto 20px auto;
-
-  display:flex;
-
-  flex-direction:row;
-
-  justify-content:space-between;
-
-  align-items:flex-start;
-
-  gap:8px;
-}
-#clockLeft{
-  flex:1;
-}
-.clock-box{
-
-  background:#111;
-
-  color:#00ff90;
-
-  border-radius:10px;
-
-  padding:16px;
-
-  margin-bottom:10px;
-
-  font-size:26px;
-
-  font-weight:bold;
-
-  letter-spacing:2px;
-
-  box-shadow:
-    0 0 10px rgba(0,255,120,0.3);
-}
-
-#pushBtn{
-
-  width:80px;
-
-  border:none;
-
-  border-radius:12px;
-
-  background:#00c853;
-
-  color:white;
-
-  font-size:24px;
-
-  font-weight:bold;
-
-  line-height:1.2;
-  height:140px;
-  margin-top:2px;
-
-  box-shadow:
-    0 0 15px rgba(0,255,120,0.5);
-}
-
-#pushBtn:active{
-  transform:scale(0.96);
-}
-
-.low-time{
-  background:#c62828 !important;
-  color:white !important;
-}
-#gmButtons{
-
-  width:95%;
-
-  max-width:360px;
-
-  margin:15px auto;
-
-  display:grid;
-
-  grid-template-columns:1fr 1fr;
-
-  gap:8px;
-}
-
-#gmButtons button{
-
-  margin:0;
-
-  padding:12px;
-
-  font-size:16px;
-
-  background:#333;
-
-  border:1px solid #555;
-}  
-</style>
-</head>
-
-<body>
-
-<h2>♕ Play Like GM - Anand ♔</h2>
 <div id="gmButtons">
 
-  <button onclick="selectGM('anand')">
-    ♔ Anand
-  </button>
-
-  <button onclick="selectGM('tal')">
-    ⚡ Tal
-  </button>
-
-  <button onclick="selectGM('carlsen')">
-    🧠 Carlsen
-  </button>
-
-  <button onclick="selectGM('hikaru')">
-    🔥 Hikaru
-  </button>
+<button onclick="selectGM('anand',this)">Anand</button>
+<button onclick="selectGM('carlsen',this)">Carlsen</button>
+<button onclick="selectGM('tal',this)">Tal</button>
+<button onclick="selectGM('hikaru',this)">Hikaru</button>
+<button onclick="selectGM('kasparov',this)">Kasparov</button>
+<button onclick="selectGM('fischer',this)">Fischer</button>
 
 </div>
-<button onclick="startGame()">🚀 START GAME</button>
+
+<h2>Select Time</h2>
+
+<div id="timeButtons">
+
+<button onclick="selectTime('blitz',this)">Blitz</button>
+<button onclick="selectTime('rapid',this)">Rapid</button>
+<button onclick="selectTime('classical',this)">Classical</button>
+
+</div>
+
+<button class="start-btn" onclick="startGame()">
+🚀 START GAME
+</button>
+
+<button class="back-btn" onclick="go('home')">
+⬅ Back
+</button>
+
+</div>
+
+<!-- GAME -->
+<div id="game" class="screen">
+
+<div id="gameHeader"></div>
 
 <div id="board"></div>
+
 <div id="clockArea">
 
-  <div id="clockLeft">
+<div id="clockLeft">
 
-    <div id="gmClock" class="clock-box">
-      GM • 05:00
-    </div>
+<div id="gmClock" class="clock-box">
+GM • 05:00
+</div>
 
-    <div id="playerClock" class="clock-box">
-      YOU • 05:00
-    </div>
-
-  </div>
-
-  <button id="pushBtn">
-    P<br>U<br>S<br>H
-  </button>
+<div id="playerClock" class="clock-box">
+YOU • 05:00
+</div>
 
 </div>
-<script>
 
-window.onload = function(){
+<button id="pushBtn">
+P<br>U<br>S<br>H
+</button>
 
-  document.getElementById("clockArea").style.display = "none";
-};
+</div>
 
-let game;
-let board;
+<button class="back-btn" onclick="go('home')">
+⬅ Home
+</button>
 
-let engine = new Worker("stockfish.js");
+</div>
 
-let playerTurn = true;
+<!-- TOOLS -->
+<div id="tools" class="screen">
 
-let playerTime = 300;
-let gmTime = 300;
+<h2>Quick Tools</h2>
 
-let clockInterval;
+<button class="main-btn" onclick="openGame()">
+▶ Play Game
+</button>
 
-let selectedGM = "anand";
-
-let gmProfiles = {
-
-  beginner: {
-    name: "Beginner",
-    moveTime: 400,
-    skill: 2
-  },
-
-  intermediate: {
-    name: "Intermediate",
-    moveTime: 700,
-    skill: 6
-  },
-
-  advanced: {
-    name: "Advanced",
-    moveTime: 1200,
-    skill: 10
-  },
-
-  expert: {
-    name: "Expert",
-    moveTime: 1800,
-    skill: 14
-  },
-
-  master: {
-    name: "Master",
-    moveTime: 2500,
-    skill: 18
-  }
-
-};
-let gmStyle = gmProfiles[selectedGM];
-
-function updateClockDisplay(){
-
-  let pMin = Math.floor(playerTime / 60);
-  let pSec = playerTime % 60;
-
-  let gMin = Math.floor(gmTime / 60);
-  let gSec = gmTime % 60;
-
-  document.getElementById("playerClock").innerText =
-    "YOU • " +
-    String(pMin).padStart(2,'0') + ":" +
-    String(pSec).padStart(2,'0');
-
-  document.getElementById("gmClock").innerText =
-    gmStyle.name.toUpperCase() + " • " +
-    String(gMin).padStart(2,'0') + ":" +
-    String(gSec).padStart(2,'0');
-
-  if(playerTime <= 30){
-    document.getElementById("playerClock").classList.add("low-time");
-  }
-
-  if(gmTime <= 30){
-    document.getElementById("gmClock").classList.add("low-time");
-  }
-}
-
-function startClock(){
-
-  clearInterval(clockInterval);
-
-  clockInterval = setInterval(function(){
-
-    if(playerTurn){
-
-      playerTime--;
-
-      if(playerTime <= 0){
-
-        clearInterval(clockInterval);
-
-        alert("YOU LOST ON TIME");
-
-        return;
-      }
-
-    } else {
-
-      gmTime--;
-
-      if(gmTime <= 0){
-
-        clearInterval(clockInterval);
-
-        alert(gmStyle.name + " LOST ON TIME");
-
-        return;
-      }
-    }
-
-    updateClockDisplay();
-
-  },1000);
-}
-
-function resetGame(){
-
-  game = new Chess();
-
-  playerTurn = true;
-
-  playerTime = 300;
-  gmTime = 300;
-
-  updateClockDisplay();
-
-  engine.postMessage("ucinewgame");
-}
-function selectGM(name){
-
-  selectedGM = name;
-
-  gmStyle = gmProfiles[selectedGM];
-
-  document.querySelector("h2").innerText =
-    "♕ Play Like GM - " + gmStyle.name + " ♔";
-}
-function startGame(){
-
-  gmStyle = gmProfiles[selectedGM];
-
-  resetGame();
-
-  document.getElementById("clockArea").style.display = "flex";
-
-  document.getElementById("board").innerHTML = "";
-
-  engine.postMessage("uci");
-
-  engine.postMessage(
-    "setoption name Skill Level value " + gmStyle.skill
-  );
-
-  board = Chessboard('board', {
-
-    position: 'start',
-
-    orientation: 'white',
-
-    draggable: true,
-
-    moveSpeed: 200,
-
-    snapbackSpeed: 200,
-
-    snapSpeed: 100,
-
-    pieceTheme:
-    'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
-
-    onDrop: onDrop
-  });
-
-  startClock();
-}
-
-function onDrop(source, target){
-
-  if(!playerTurn){
-    return 'snapback';
-  }
-
-  let move = game.move({
-
-    from: source,
-
-    to: target,
-
-    promotion: 'q'
-  });
-
-  if(move === null){
-    return 'snapback';
-  }
-
-  board.position(game.fen());
-
-  $('#board .square-55d63').removeClass('highlight-white');
-
-  $('#board .square-' + source)
-    .addClass('highlight-white');
-
-  $('#board .square-' + target)
-    .addClass('highlight-white');
-
-  return;
-}
-
-document.getElementById("pushBtn").onclick = function(){
-
-  if(playerTurn === false){
-    return;
-  }
-
-  playerTurn = false;
-
-  setTimeout(function(){
-
-    aiMove();
-
-  },300);
-};
-
-function aiMove(){
-
-  engine.postMessage("position fen " + game.fen());
-let legalMoves = game.moves({ verbose:true });
-
-if(gmStyle.style === "aggressive"){
-
-  let captures = legalMoves.filter(
-    m => m.flags.includes('c')
-  );
-
-  if(captures.length > 0){
-
-    let bestCapture =
-      captures[Math.floor(Math.random()*captures.length)];
-
-    game.move(bestCapture);
-
-    board.position(game.fen());
-
-    playerTurn = true;
-
-    return;
-  }
-}
-  engine.postMessage(
-    "go movetime " + gmStyle.moveTime
-  );
-
-  engine.onmessage = function(event){
-
-    let line = event.data;
-
-    if(line.startsWith("bestmove")){
-
-      let move = line.split(" ")[1];
-
-      if(move === "(none)"){
-        return;
-      }
-
-      let fromSquare = move.substring(0,2);
-
-      let toSquare = move.substring(2,4);
-
-      game.move({
-
-        from: fromSquare,
-
-        to: toSquare,
-
-        promotion: 'q'
-      });
-
-      board.position(game.fen());
-
-      playerTurn = true;
-
-      $('#board .square-55d63')
-        .removeClass('highlight-white');
-
-      $('#board .square-' + fromSquare)
-        .addClass('highlight-white');
-
-      $('#board .square-' + toSquare)
-        .addClass('highlight-white');
-    }
-  };
-}
-
-</script>
-</body>
+<button class="main-btn" onclick="openPuzzle()">
+🧠 Puzzle Training
 </html>
