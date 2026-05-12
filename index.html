@@ -222,29 +222,32 @@ let gmProfiles = {
   anand: {
     name: "Anand",
     moveTime: 1200,
-    skill: 10
+    skill: 12,
+    style: "balanced"
   },
 
   tal: {
     name: "Tal",
-    moveTime: 700,
-    skill: 6
+    moveTime: 500,
+    skill: 8,
+    style: "aggressive"
   },
 
   carlsen: {
     name: "Carlsen",
     moveTime: 1800,
-    skill: 16
+    skill: 18,
+    style: "positional"
   },
 
   hikaru: {
     name: "Hikaru",
-    moveTime: 400,
-    skill: 8
+    moveTime: 300,
+    skill: 10,
+    style: "fast"
   }
 
 };
-
 let gmStyle = gmProfiles[selectedGM];
 
 function updateClockDisplay(){
@@ -423,7 +426,28 @@ document.getElementById("pushBtn").onclick = function(){
 function aiMove(){
 
   engine.postMessage("position fen " + game.fen());
+let legalMoves = game.moves({ verbose:true });
 
+if(gmStyle.style === "aggressive"){
+
+  let captures = legalMoves.filter(
+    m => m.flags.includes('c')
+  );
+
+  if(captures.length > 0){
+
+    let bestCapture =
+      captures[Math.floor(Math.random()*captures.length)];
+
+    game.move(bestCapture);
+
+    board.position(game.fen());
+
+    playerTurn = true;
+
+    return;
+  }
+}
   engine.postMessage(
     "go movetime " + gmStyle.moveTime
   );
