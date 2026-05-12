@@ -152,26 +152,56 @@ button{
 
 </div>
 <script>
+
 window.onload = function(){
 
   document.getElementById("clockArea").style.display = "none";
 };
+
 let game;
 let board;
+
 let engine = new Worker("stockfish.js");
+
 let playerTurn = true;
+
 let playerTime = 300;
 let gmTime = 300;
 
-let clockInterval;  
-let skillLevel = 8;
+let clockInterval;
 
-let gmStyle = {
-  openingMoves: ["e4","Nf3","Bb5","Ba4","O-O"],
-  moveTime: 1200
+let selectedGM = "anand";
+
+let gmProfiles = {
+
+  anand: {
+    name: "Anand",
+    moveTime: 1200,
+    skill: 10
+  },
+
+  tal: {
+    name: "Tal",
+    moveTime: 700,
+    skill: 6
+  },
+
+  carlsen: {
+    name: "Carlsen",
+    moveTime: 1800,
+    skill: 16
+  },
+
+  hikaru: {
+    name: "Hikaru",
+    moveTime: 400,
+    skill: 8
+  }
+
 };
 
-let openingIndex = 0;
+let gmStyle = gmProfiles[selectedGM];
+
 function updateClockDisplay(){
 
   let pMin = Math.floor(playerTime / 60);
@@ -186,30 +216,20 @@ function updateClockDisplay(){
     String(pSec).padStart(2,'0');
 
   document.getElementById("gmClock").innerText =
-    "GM • " +
+    gmStyle.name.toUpperCase() + " • " +
     String(gMin).padStart(2,'0') + ":" +
     String(gSec).padStart(2,'0');
-}  
-function resetGame(){
 
-  game = new Chess();
+  if(playerTime <= 30){
+    document.getElementById("playerClock").classList.add("low-time");
+  }
 
-  openingIndex = 0;
+  if(gmTime <= 30){
+    document.getElementById("gmClock").classList.add("low-time");
+  }
+}
 
-  playerTurn = true;
-
-  playerTime = 300;
-  gmTime = 300;
-
-  updateClockDisplay();
-
-  engine.postMessage("ucinewgame");
-}  
-function startGame(){
-
- resetGame();
-
-  function startClock(){
+function startClock(){
 
   clearInterval(clockInterval);
 
@@ -236,7 +256,7 @@ function startGame(){
 
         clearInterval(clockInterval);
 
-        alert("GM LOST ON TIME");
+        alert(gmStyle.name + " LOST ON TIME");
 
         return;
       }
@@ -246,7 +266,93 @@ function startGame(){
 
   },1000);
 }
- document.getElementById("pushBtn").onclick = function(){
+
+function resetGame(){
+
+  game = new Chess();
+
+  playerTurn = true;
+
+  playerTime = 300;
+  gmTime = 300;
+
+  updateClockDisplay();
+
+  engine.postMessage("ucinewgame");
+}
+
+function startGame(){
+
+  gmStyle = gmProfiles[selectedGM];
+
+  resetGame();
+
+  document.getElementById("clockArea").style.display = "flex";
+
+  document.getElementById("board").innerHTML = "";
+
+  engine.postMessage("uci");
+
+  engine.postMessage(
+    "setoption name Skill Level value " + gmStyle.skill
+  );
+
+  board = Chessboard('board', {
+
+    position: 'start',
+
+    orientation: 'white',
+
+    draggable: true,
+
+    moveSpeed: 200,
+
+    snapbackSpeed: 200,
+
+    snapSpeed: 100,
+
+    pieceTheme:
+    'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
+
+    onDrop: onDrop
+  });
+
+  startClock();
+}
+
+function onDrop(source, target){
+
+  if(!playerTurn){
+    return 'snapback';
+  }
+
+  let move = game.move({
+
+    from: source,
+
+    to: target,
+
+    promotion: 'q'
+  });
+
+  if(move === null){
+    return 'snapback';
+  }
+
+  board.position(game.fen());
+
+  $('#board .square-55d63').removeClass('highlight-white');
+
+  $('#board .square-' + source)
+    .addClass('highlight-white');
+
+  $('#board .square-' + target)
+    .addClass('highlight-white');
+
+  return;
+}
+
+document.getElementById("pushBtn").onclick = function(){
 
   if(playerTurn === false){
     return;
@@ -255,120 +361,20 @@ function startGame(){
   playerTurn = false;
 
   setTimeout(function(){
+
     aiMove();
+
   },300);
 };
-engine.postMessage("uci");
 
-engine.postMessage("setoption name Skill Level value " + skillLevel);
-
-engine.postMessage("ucinewgame");
-document.getElementById("board").innerHTML = "";  
-startClock();
-document.getElementById("clockArea").style.display = "flex";  
-  board = Chessboard('board', {
-  position: 'start',
- orientation: 'white',
-  draggable: true,
-  moveSpeed: 200,
-  snapbackSpeed: 200,
-  snapSpeed: 100,
-    pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
-    onDrop: onDrop
-  });
-  }
-$('#board').on('touchstart click', '.square-55d63', function(){
-
-  let square = $(this).attr('data-square');
-
-  if(!window.selectedSquare){
-
-    window.selectedSquare = square;
-
-    return;
-  }
-
-  let move = game.move({
-    from: window.selectedSquare,
-    to: square,
-    promotion: 'q'
-  });
-
-  window.selectedSquare = null;
-
-  if(move === null){
-    return;
-  }
-
-  board.position(game.fen());
-$('#board .square-55d63').removeClass('highlight-white');
-
-$('#board .square-' + source).addClass('highlight-white');
-
-$('#board .square-' + target).addClass('highlight-white');
-  setTimeout(function(){
-    aiMove();
-  },300);
-});
-function onDrop(source, target){
-if(!playerTurn){
-  return 'snapback';
-}
-  let move = game.move({
-    from: source,
-    to: target,
-    promotion: 'q'
-  });
-
-  if(move === null){
-    return 'snapback';
-  }
-
-playerTurn = false;
-
-board.position(game.fen());
-
-document.getElementById("playerClock").classList.add("active-clock");
-
-document.getElementById("gmClock").classList.remove("active-clock");
-  return;
-}
-// Anand opening memory
-let anandLine = [
-  "e5",
-  "Nc6",
-  "Nf6",
-  "Bc5",
-  "d6",
-  "O-O"
-];
-
-let moveIndex = 0;
-
-// Better AI Move
 function aiMove(){
-if(openingIndex < gmStyle.openingMoves.length){
 
-  let openingMove = gmStyle.openingMoves[openingIndex];
-
-  let result = game.move(openingMove);
-
-  if(result !== null){
-
-    openingIndex++;
-
-    board.position(game.fen());
-playerTurn = true;
-document.getElementById("gmClock").classList.remove("active-clock");
-
-document.getElementById("playerClock").classList.add("active-clock");
-    return;
-  }
-}
   engine.postMessage("position fen " + game.fen());
 
-  engine.postMessage("go movetime " + gmStyle.moveTime);
-  
+  engine.postMessage(
+    "go movetime " + gmStyle.moveTime
+  );
+
   engine.onmessage = function(event){
 
     let line = event.data;
@@ -381,29 +387,35 @@ document.getElementById("playerClock").classList.add("active-clock");
         return;
       }
 
- let fromSquare = move.substring(0,2);
+      let fromSquare = move.substring(0,2);
 
-let toSquare = move.substring(2,4);
+      let toSquare = move.substring(2,4);
 
-game.move({
-  from: fromSquare,
-  to: toSquare,
-  promotion: 'q'
-});
+      game.move({
+
+        from: fromSquare,
+
+        to: toSquare,
+
+        promotion: 'q'
+      });
+
       board.position(game.fen());
 
-playerTurn = true;
+      playerTurn = true;
 
-$('#board .square-55d63').removeClass('highlight-white');
+      $('#board .square-55d63')
+        .removeClass('highlight-white');
 
-$('#board .square-' + fromSquare).addClass('highlight-white');
+      $('#board .square-' + fromSquare)
+        .addClass('highlight-white');
 
-$('#board .square-' + toSquare).addClass('highlight-white');
+      $('#board .square-' + toSquare)
+        .addClass('highlight-white');
     }
   };
 }
- 
-</script>
 
+</script>
 </body>
 </html>
