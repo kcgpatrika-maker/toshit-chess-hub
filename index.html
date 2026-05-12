@@ -370,26 +370,8 @@ let moveIndex = 0;
 // Better AI Move
 function aiMove(){
 console.log(gmStyle);
-  if(openingIndex < gmStyle.openingMoves.length){
-
-  let openingMove = gmStyle.openingMoves[openingIndex];
-
-  let result = game.move(openingMove);
-console.log(result);
-  if(result !== null){
-
-    openingIndex++;
-
-    board.position(game.fen());
-playerTurn = true;
-document.getElementById("gmClock").classList.remove("active-clock");
-
-document.getElementById("playerClock").classList.add("active-clock");
-    return;
-  }
-}
   engine.postMessage("position fen " + game.fen());
-
+playerTurn = false;
   engine.postMessage("go movetime " + gmStyle.moveTime);
   
   engine.onmessage = function(event){
