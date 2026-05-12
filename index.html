@@ -16,12 +16,12 @@ href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
 <script src="stockfish.js"></script>
 <style>
-body{
-  margin:0;
-  background:#222;
-  color:white;
+body {
+  background:#111;
+  color:#fff;
   font-family:Arial;
   text-align:center;
+  margin:0;
 }
 
 h1{
@@ -207,41 +207,42 @@ button{
 <h1>♕ TOSHIT CHESS HUB ♔</h1>
 
 <!-- HOME -->
+<div class="title-bar"></div>
 <div id="home" class="screen active">
 
 <button class="main-btn" onclick="go('play')">
 ▶ Play Like GM
 </button>
 <div class="desc">
-Grandmaster की तरह खेलने के लिए training करें
+Grandmaster की तरह खेलने के लिए सही प्लेटफॉर्म पर सीधे जाएं और practice करें
 </div>
 
 <button class="main-btn" onclick="startTraining()">
 🧠 Daily Training
 </button>
 <div class="desc">
-Puzzle + Game + Analysis workflow
+रोजाना training routine: puzzles + game + analysis — जिससे खेल तेजी से improve होगा
 </div>
 
 <button class="main-btn" onclick="go('tools')">
 ⚡ Quick Tools
 </button>
 <div class="desc">
-Quick chess utilities
+Quick tools से तुरंत खेलें, सीखें और अपनी गलतियों को समझें
 </div>
 
 <button class="main-btn" onclick="go('stats')">
 📊 My Progress
 </button>
 <div class="desc">
-Daily improvement tracking
+अपनी daily progress देखें और improvement track करें
 </div>
 
 <button class="main-btn" onclick="openRajasthan()">
 🏆 Rajasthan Chess Results
 </button>
 <div class="desc">
-राजस्थान tournaments और results
+राजस्थान tournaments और results देखें
 </div>
 
 </div>
