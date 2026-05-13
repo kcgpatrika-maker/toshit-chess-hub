@@ -260,7 +260,10 @@ Quick tools से तुरंत खेलें, सीखें और अ�
 <button onclick="selectGM('hikaru',this)">Hikaru</button>
 <button onclick="selectGM('kasparov',this)">Kasparov</button>
 <button onclick="selectGM('fischer',this)">Fischer</button>
-
+<button onclick="selectGM('kramnik',this)">Kramnik</button>
+<button onclick="selectGM('ding',this)">Ding</button>
+<button onclick="selectGM('alireza',this)">Alireza</button>
+<button onclick="selectGM('nepo',this)">Nepo</button>
 </div>
 
 <h2>Select Time</h2>
@@ -402,46 +405,99 @@ let gmTime = 600;
 let clockInterval;
 
 let reviewData = {1:false,2:false,3:false};
-
+let openingIndex = 0;
 let gmProfiles = {
 
   anand:{
     name:"Anand",
     moveTime:1200,
-    skill:12
+    skill:14,
+    openings:[
+      "e4","Nf3","Bb5","Ba4","O-O"
+    ]
   },
 
   carlsen:{
     name:"Carlsen",
     moveTime:1800,
-    skill:18
+    skill:18,
+    openings:[
+      "d4","Nf3","g3","Bg2","O-O"
+    ]
   },
 
   tal:{
     name:"Tal",
     moveTime:900,
-    skill:11
+    skill:13,
+    openings:[
+      "e4","f4","Nf3","Bc4","d4"
+    ]
   },
 
   hikaru:{
     name:"Hikaru",
     moveTime:500,
-    skill:10
+    skill:12,
+    openings:[
+      "e4","Nc3","f4","Nf3","Bc4"
+    ]
   },
 
   kasparov:{
     name:"Kasparov",
-    moveTime:1600,
-    skill:17
+    moveTime:1500,
+    skill:17,
+    openings:[
+      "e4","Nf3","d4","Bc4","O-O"
+    ]
   },
 
   fischer:{
     name:"Fischer",
+    moveTime:1600,
+    skill:17,
+    openings:[
+      "e4","Nf3","Bc4","d3","O-O"
+    ]
+  },
+
+  kramnik:{
+    name:"Kramnik",
+    moveTime:2200,
+    skill:18,
+    openings:[
+      "d4","Nf3","c4","Nc3","g3"
+    ]
+  },
+
+  ding:{
+    name:"Ding",
     moveTime:1700,
-    skill:17
+    skill:17,
+    openings:[
+      "Nf3","g3","Bg2","O-O","d3"
+    ]
+  },
+
+  alireza:{
+    name:"Alireza",
+    moveTime:700,
+    skill:14,
+    openings:[
+      "e4","f4","Bc4","Nf3","d4"
+    ]
+  },
+
+  nepo:{
+    name:"Nepo",
+    moveTime:1000,
+    skill:15,
+    openings:[
+      "e4","Nf3","d4","Bc4","Nc3"
+    ]
   }
 };
-
 function go(id){
 
   document.querySelectorAll('.screen')
@@ -554,7 +610,7 @@ function startGame(){
   updateClockDisplay();
 
   game = new Chess();
-
+  openingIndex = 0;
   playerTurn = true;
 
   document.getElementById('gameHeader').innerText =
@@ -641,13 +697,44 @@ document.getElementById('pushBtn').onclick = function(){
 
 function aiMove(){
 
+  let gm = gmProfiles[selectedGM];
+
+  // GM opening personality
+  if(openingIndex < gm.openings.length){
+
+    let openingMove = gm.openings[openingIndex];
+
+    let result = game.move(openingMove);
+
+    if(result !== null){
+
+      openingIndex++;
+
+      board.position(game.fen());
+
+      playerTurn = true;
+
+      $('#board .square-55d63')
+      .removeClass('highlight-white');
+
+      $('#board .square-' + result.from)
+      .addClass('highlight-white');
+
+      $('#board .square-' + result.to)
+      .addClass('highlight-white');
+
+      checkGameStatus();
+
+      return;
+    }
+  }
+
   engine.postMessage(
     'position fen ' + game.fen()
   );
 
   engine.postMessage(
-    'go movetime ' +
-    gmProfiles[selectedGM].moveTime
+    'go movetime ' + gm.moveTime
   );
 
   engine.onmessage = function(event){
@@ -663,6 +750,7 @@ function aiMove(){
       }
 
       let fromSquare = move.substring(0,2);
+
       let toSquare = move.substring(2,4);
 
       game.move({
@@ -686,10 +774,52 @@ function aiMove(){
 
       $('#board .square-' + toSquare)
       .addClass('highlight-white');
+
+      checkGameStatus();
     }
   };
 }
+function checkGameStatus(){
 
+  // Checkmate
+  if(game.in_checkmate()){
+
+    clearInterval(clockInterval);
+
+    if(playerTurn){
+
+      alert(
+        gmProfiles[selectedGM].name +
+        " wins by CHECKMATE!"
+      );
+
+    } else {
+
+      alert("YOU WIN by CHECKMATE!");
+    }
+
+    localStorage.setItem("needReview","yes");
+
+    return;
+  }
+
+  // Draw
+  if(
+    game.in_draw() ||
+    game.in_stalemate() ||
+    game.in_threefold_repetition()
+  ){
+
+    clearInterval(clockInterval);
+
+    alert(
+      gmProfiles[selectedGM].name +
+      " offers a DRAW"
+    );
+
+    localStorage.setItem("needReview","yes");
+  }
+}  
 function startTraining(){
 
   window.open('https://lichess.org/training','_blank');
