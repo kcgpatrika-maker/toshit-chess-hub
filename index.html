@@ -374,19 +374,41 @@ Finish Review
 
 <h2>📊 My Progress</h2>
 
-<p>Games: <span id="games">0</span></p>
-<p>Reviews: <span id="reviews">0</span></p>
+<p>🎮 Games Played:
+<span id="gamesPlayed">0</span></p>
 
-<button class="main-btn" onclick="resetStats()">
+<p>🏆 Wins:
+<span id="wins">0</span></p>
+
+<p>🤝 Draws:
+<span id="draws">0</span></p>
+
+<p>🧠 Training Sessions:
+<span id="trainingSessions">0</span></p>
+
+<p>♟ Puzzle Sessions:
+<span id="puzzleSessions">0</span></p>
+
+<p>📊 Reviews Completed:
+<span id="reviewsCompleted">0</span></p>
+
+<p>🔥 Current Streak:
+<span id="currentStreak">0</span></p>
+
+<p>👑 Favorite GM:
+<span id="favoriteGM">Anand</span></p>
+
+<button class="main-btn"
+onclick="resetStats()">
 Reset Stats
 </button>
 
-<button class="back-btn" onclick="go('home')">
+<button class="back-btn"
+onclick="go('home')">
 ⬅ Back
 </button>
 
 </div>
-
 <script>
 
 let game;
@@ -405,6 +427,13 @@ let gmTime = 600;
 let clockInterval;
 
 let reviewData = {1:false,2:false,3:false};
+function incrementStat(key){
+
+  let value =
+  parseInt(localStorage.getItem(key) || 0);
+
+  localStorage.setItem(key,value + 1);
+}  
 let openingIndex = 0;
 let gmProfiles = {
 
@@ -604,7 +633,12 @@ function startClock(){
 function startGame(){
 
   go('game');
+incrementStat("gamesPlayed");
 
+localStorage.setItem(
+  "favoriteGM",
+  gmProfiles[selectedGM].name
+);
   setClock();
 
   updateClockDisplay();
@@ -796,6 +830,7 @@ function checkGameStatus(){
     } else {
 
       alert("YOU WIN by CHECKMATE!");
+      incrementStat("wins");
     }
 
     localStorage.setItem("needReview","yes");
@@ -815,13 +850,18 @@ function checkGameStatus(){
     alert(
       gmProfiles[selectedGM].name +
       " offers a DRAW"
+      incrementStat("draws");
     );
 
     localStorage.setItem("needReview","yes");
   }
 }  
 function startTraining(){
+incrementStat("trainingSessions");
 
+incrementStat("puzzleSessions");
+
+updateStreak();
   window.open('https://lichess.org/training','_blank');
 
   setTimeout(()=>{
@@ -874,7 +914,7 @@ function checkFinish(){
 }
 
 function finishReview(){
-
+incrementStat("reviewsCompleted");
   let g = parseInt(
     localStorage.getItem('games') || 0
   );
@@ -890,23 +930,98 @@ function finishReview(){
 
   go('home');
 }
+function updateStreak(){
 
+  let today =
+  new Date().toDateString();
+
+  let lastDate =
+  localStorage.getItem("lastTrainingDate");
+
+  let streak =
+  parseInt(localStorage.getItem(
+    "currentStreak"
+  ) || 0);
+
+  if(lastDate !== today){
+
+    streak++;
+
+    localStorage.setItem(
+      "currentStreak",
+      streak
+    );
+
+    localStorage.setItem(
+      "lastTrainingDate",
+      today
+    );
+  }
+}
 function loadStats(){
 
-  document.getElementById('games').innerText =
-  localStorage.getItem('games') || 0;
+  document.getElementById(
+    "gamesPlayed"
+  ).innerText =
+  localStorage.getItem(
+    "gamesPlayed"
+  ) || 0;
 
-  document.getElementById('reviews').innerText =
-  localStorage.getItem('reviews') || 0;
+  document.getElementById(
+    "wins"
+  ).innerText =
+  localStorage.getItem(
+    "wins"
+  ) || 0;
+
+  document.getElementById(
+    "draws"
+  ).innerText =
+  localStorage.getItem(
+    "draws"
+  ) || 0;
+
+  document.getElementById(
+    "trainingSessions"
+  ).innerText =
+  localStorage.getItem(
+    "trainingSessions"
+  ) || 0;
+
+  document.getElementById(
+    "puzzleSessions"
+  ).innerText =
+  localStorage.getItem(
+    "puzzleSessions"
+  ) || 0;
+
+  document.getElementById(
+    "reviewsCompleted"
+  ).innerText =
+  localStorage.getItem(
+    "reviewsCompleted"
+  ) || 0;
+
+  document.getElementById(
+    "currentStreak"
+  ).innerText =
+  localStorage.getItem(
+    "currentStreak"
+  ) || 0;
+
+  document.getElementById(
+    "favoriteGM"
+  ).innerText =
+  localStorage.getItem(
+    "favoriteGM"
+  ) || "Anand";
 }
-
 function resetStats(){
 
   localStorage.clear();
 
   loadStats();
 }
-
 function openRajasthan(){
 
   window.open(
