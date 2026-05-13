@@ -848,10 +848,11 @@ function checkGameStatus(){
     clearInterval(clockInterval);
 
     alert(
-      gmProfiles[selectedGM].name +
-      " offers a DRAW"
-      incrementStat("draws");
-    );
+  gmProfiles[selectedGM].name +
+  " offers a DRAW"
+);
+
+incrementStat("draws");
 
     localStorage.setItem("needReview","yes");
   }
