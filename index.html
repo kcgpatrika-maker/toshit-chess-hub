@@ -323,6 +323,22 @@ Quick tools से तुरंत खेलें, सीखें और अ�
 
 </div>
 
+<h3>Select Color</h3>
+
+<div id="colorButtons">
+
+<button
+onclick="selectColor('white',this)"
+class="selected-btn">
+⚪ Play White
+</button>
+
+<button
+onclick="selectColor('black',this)">
+⚫ Play Black
+</button>
+
+</div>  
 <button class="start-btn" onclick="startGame()">
 🚀 START GAME
 </button>
@@ -465,6 +481,7 @@ let engine = new Worker("stockfish.js");
 
 let selectedGM = "anand";
 let selectedTime = "rapid";
+let selectedColor = "white";  
 
 let playerTurn = true;
 
@@ -602,7 +619,15 @@ function selectTime(type,btn){
 
   btn.classList.add('selected-btn');
 }
+function selectColor(color,btn){
 
+  selectedColor = color;
+
+  document.querySelectorAll('#colorButtons button')
+  .forEach(b=>b.classList.remove('selected-btn'));
+
+  btn.classList.add('selected-btn');
+}
 function setClock(){
 
   if(selectedTime === 'blitz'){
@@ -705,7 +730,7 @@ localStorage.setItem(
 
     position:'start',
 
-    orientation:'white',
+    orientation:selectedColor,
 
     draggable:true,
 
@@ -728,6 +753,16 @@ localStorage.setItem(
   );
 
   startClock();
+  if(selectedColor === "black"){
+
+  playerTurn = false;
+
+  setTimeout(function(){
+
+    aiMove();
+
+  },800);
+}
 }
 
 function onDrop(source,target){
