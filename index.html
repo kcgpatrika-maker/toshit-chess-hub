@@ -809,6 +809,8 @@ function onDrop(source,target){
 
   $('#board .square-' + target)
   .addClass('highlight-white');
+  
+  checkGameStatus();
 }
 
 document.getElementById('pushBtn').onclick = function(){
@@ -1056,6 +1058,8 @@ incrementStat("reviewsCompleted");
 
   localStorage.setItem('games',g+1);
   localStorage.setItem('reviews',r+1);
+
+  localStorage.removeItem("needReview");
 
   loadStats();
 
