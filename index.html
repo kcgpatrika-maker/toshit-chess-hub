@@ -425,6 +425,11 @@ P<br>U<br>S<br>H
 <button class="opt" onclick="selectOpt(3,this)">Solid Defense</button>
 <button class="opt" onclick="selectOpt(3,this)">Lucky Win</button>
 
+<button class="start-btn"
+onclick="viewMoves()">
+📜 View Moves
+</button>  
+
 <button class="start-btn" id="finishBtn" disabled
 onclick="finishReview()">
 Finish Review
@@ -995,7 +1000,35 @@ function checkFinish(){
     .disabled = false;
   }
 }
+function viewMoves(){
 
+  let moves = game.history();
+
+  if(moves.length === 0){
+
+    alert("No moves available");
+
+    return;
+  }
+
+  let text = "";
+
+  for(let i=0;i<moves.length;i+=2){
+
+    let moveNo = Math.floor(i/2)+1;
+
+    let whiteMove = moves[i] || "";
+
+    let blackMove = moves[i+1] || "";
+
+    text +=
+      moveNo + ". " +
+      whiteMove + " " +
+      blackMove + "\n";
+  }
+
+  alert(text);
+}
 function finishReview(){
 incrementStat("reviewsCompleted");
   let g = parseInt(
