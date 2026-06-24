@@ -688,6 +688,11 @@ function startClock(){
         clearInterval(clockInterval);
 
         alert('YOU LOST ON TIME');
+        localStorage.setItem("needReview","yes");
+
+        go('review');
+
+        return;
       }
 
     } else {
@@ -699,6 +704,11 @@ function startClock(){
         clearInterval(clockInterval);
 
         alert(gmProfiles[selectedGM].name + ' LOST ON TIME');
+        localStorage.setItem("needReview","yes");
+
+        go('review');
+
+      return;
       }
     }
 
@@ -922,6 +932,8 @@ function checkGameStatus(){
 
     localStorage.setItem("needReview","yes");
 
+    go('review');
+
     return;
   }
 
@@ -942,7 +954,10 @@ function checkGameStatus(){
 incrementStat("draws");
 
     localStorage.setItem("needReview","yes");
-  }
+  go('review');
+
+  return;
+}
 }  
 function startTraining(){
 incrementStat("trainingSessions");
